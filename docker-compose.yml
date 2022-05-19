@@ -54,9 +54,9 @@ services:
     container_name: shop-elasticsearch
 #    restart: unless-stopped
     environment:
-      - node.name=es01
-      - cluster.name=es-docker-cluster
-      - cluster.initial_master_nodes=es01
+      - node.name=shop01
+      - cluster.name=shop-cluster
+      - cluster.initial_master_nodes=shop01
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
