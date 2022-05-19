@@ -18,6 +18,10 @@
 
 далее:
 <p style="color: #F8F8F8; font-weight: bold;">
+sysctl -w vm.max_map_count=262144
+</p>
+
+<p style="color: #F8F8F8; font-weight: bold;">
 docker-compose  --env-file ./application/.env up  -d --build
 </p>
 
