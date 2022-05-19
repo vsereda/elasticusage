@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+
+  #Laravel App
+  app:
+    build:
+      args:
+        user: vladimir
+        uid: 1000
+      context: ./application/
+      dockerfile: ../docker-compose/Dockerfile
+    image: laravel-app
+    container_name: laravel-app
+#    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./application/:/var/www
+    networks:
+      - mynetwork
+
+  #Nginx Service
+  nginx:
+    image: nginx:alpine
+    container_name: laravel-nginx
+#    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./application/:/var/www
+      - ./docker-compose/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - mynetwork
+  #Mysl Service
+  db:
+    image: mysql:8.0
+    container_name: laravel-db
+    ports:
+        - "3306:3306"
+    volumes:
+        - ./docker-compose/volumes/mysql:/var/lib/mysql
+#    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
