@@ -1,7 +1,7 @@
 version: "3.7"
 services:
 
-  #Laravel App
+  #Shop Application
   app:
     build:
       args:
@@ -9,19 +9,19 @@ services:
         uid: 1000
       context: ./application/
       dockerfile: ../docker-compose/Dockerfile
-    image: laravel-app
-    container_name: laravel-app
+    image: shop-app
+    container_name: shop-app
 #    restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./application/:/var/www
     networks:
-      - mynetwork
+      - shop_network
 
   #Nginx Service
   nginx:
     image: nginx:alpine
-    container_name: laravel-nginx
+    container_name: shop-nginx
 #    restart: unless-stopped
     ports:
       - 80:80
@@ -29,11 +29,12 @@ services:
       - ./application/:/var/www
       - ./docker-compose/nginx/conf.d/:/etc/nginx/conf.d/
     networks:
-      - mynetwork
+      - shop_network
+
   #Mysl Service
   db:
     image: mysql:8.0
-    container_name: laravel-db
+    container_name: shop-db
     ports:
         - "3306:3306"
     volumes:
@@ -45,8 +46,34 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_USER: ${DB_USERNAME}
     networks:
-      - mynetwork
+      - shop_network
+
+#  Elasticsearch service
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+    container_name: shop-elasticsearch
+#    restart: unless-stopped
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - cluster.initial_master_nodes=es01
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+    volumes:
+      - shop_elasticsearch_01:/usr/share/elasticsearch/data
+    networks:
+      - shop_network
+
+volumes:
+  shop_elasticsearch_01:
+    driver: local
 
 networks:
-  mynetwork:
+  shop_network:
     driver: bridge
