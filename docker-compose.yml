@@ -15,6 +15,7 @@ services:
     working_dir: /var/www/
     volumes:
       - ./application/:/var/www
+      - ./docker-compose/php/php.ini:/usr/local/etc/php/php.ini
     networks:
       - shop_network
 

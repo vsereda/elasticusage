@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.1.6-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip
+
+RUN pecl install xdebug-3.1.5
+RUN docker-php-ext-enable xdebug
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
