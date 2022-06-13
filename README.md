@@ -42,3 +42,9 @@ docker exec -it laravel-app bash
 <p style="color: #F8F8F8; font-weight: bold;">
 php artisan migrate --seed
 </p>
+<p style="color: #F8F8F8; font-weight: bold;">
+php artisan elastic:migrate
+</p>
+<p style="color: #F8F8F8; font-weight: bold;">
+php artisan scout:import "App\Models\User"
+</p>
