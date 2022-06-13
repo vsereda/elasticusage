@@ -18,7 +18,7 @@
 
 далее:
 <p style="color: #F8F8F8; font-weight: bold;">
-sysctl -w vm.max_map_count=262144
+sudo sysctl -w vm.max_map_count=262144
 </p>
 
 <p style="color: #F8F8F8; font-weight: bold;">
