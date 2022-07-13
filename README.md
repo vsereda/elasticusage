@@ -17,8 +17,10 @@
 	APP_URL=https://laravel8.org
 
 далее:
-<p style="color: #F8F8F8; font-weight: bold;">
-sudo sysctl -w vm.max_map_count=262144
+<p style="color: #F8F8F8;">
+The default operating system limits on mmap counts is likely to be too low, which may result in out of memory exceptions.
+To set this value permanently, update the <b><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.17/vm-max-map-count.html">vm.max_map_count</a></b> setting in <b>/etc/sysctl.conf</b>: 
+<b>vm.max_map_count=262144</b>
 </p>
 
 <p style="color: #F8F8F8; font-weight: bold;">
