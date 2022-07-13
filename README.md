@@ -35,15 +35,18 @@ docker-compose exec app php artisan key:generate
 
 далее вместо того чтобы каждый раз писать <span  style="color: #F8F8F8; font-weight: bold;">docker-compose exec app</span> можно использовать для входа в контейнер:
 <p style="color: #F8F8F8; font-weight: bold;">
-docker exec -it laravel-app bash
+docker exec -it shop-app bash
 </p>
 
 должены быть выполнены миграции и посев данных:
 <p style="color: #F8F8F8; font-weight: bold;">
-php artisan migrate --seed
+php artisan migrate
 </p>
 <p style="color: #F8F8F8; font-weight: bold;">
 php artisan elastic:migrate
+</p>
+<p style="color: #F8F8F8; font-weight: bold;">
+php artisan db:seed
 </p>
 <p style="color: #F8F8F8; font-weight: bold;">
 php artisan scout:import "App\Models\User"
