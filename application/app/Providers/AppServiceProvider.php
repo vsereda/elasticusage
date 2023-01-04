@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
+use function Symfony\Component\String\s;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        DB::listen(function ($query) {
+             $sql = $query->sql;
+             $bindings = $query->bindings;
+//             $time = $query->time;
+//             dump($sql);
+//             dump($bindings);
+        });
     }
 }
