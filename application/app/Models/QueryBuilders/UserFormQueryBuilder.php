@@ -4,7 +4,7 @@ namespace App\Models\QueryBuilders;
 
 use ElasticScoutDriverPlus\Builders\QueryBuilderInterface;
 
-final class SearchFormQueryBuilder implements QueryBuilderInterface
+final class UserFormQueryBuilder implements QueryBuilderInterface
 {
     /**
      * @var string
