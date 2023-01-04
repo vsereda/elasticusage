@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 //use Laravel\Scout\Searchable;
 use ElasticScoutDriverPlus\Searchable;
-use App\Models\QueryBuilders\SearchFormQueryBuilder;
+use App\Models\QueryBuilders\UserFormQueryBuilder;
 use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
 
 class User extends Authenticatable
@@ -60,6 +60,6 @@ class User extends Authenticatable
 
     public static function searchForm(string $name): SearchRequestBuilder
     {
-        return new SearchRequestBuilder(new SearchFormQueryBuilder($name), new static());
+        return new SearchRequestBuilder(new UserFormQueryBuilder($name), new static());
     }
 }
