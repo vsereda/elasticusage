@@ -33,36 +33,42 @@ class TestController extends Controller
         $result = User::searchQuery($query)
             ->highlight('name')
             ->execute();
-        dump('$result');
+        dump('1) $result = User::searchQuery($query)->highlight(\'name\')->execute()');
         dump($result);
-        dump('models');
+
+        dump('2) $result->models()->all()');
         dump($result->models()->all());
-        dump('documents');
+
+        dump('3) $result->documents()');
         dump($result->documents());
 
         $match = $result->hits()->first();
-        dump('$match');
+        dump('4) $match = $result->hits()->first()');
         dump($match);
 
-        dump('document = $match->document()');
-        dump($document = $match->document());
+        $document = $match->document();
+        dump('5) $document = $match->document()');
+        dump($document);
 
-        dump('$match->model()');
+        dump('6) $match->model()');
         dump($match->model());
 
-        dump('$highlight = $match->highlight()');
-        dump($highlight = $match->highlight());
+        $highlight = $match->highlight();
+        dump('7) $highlight = $match->highlight()');
+        dump($highlight);
 
-        dump('$match->highlight()->getSnippets(\'name\')');
+        dump('8) $match->highlight()->snippets(\'name\')');
+        dump($match->highlight()->snippets('name'));
+        dump('8) $highlight->snippets(\'name\')');
         dump($highlight->snippets('name'));
 
-        dump('$document->content()');
+        dump('9) $document->content()');
         dump($document->content());
 
-        dump("User::searchForm('Leixe')->execute()->models()");
+        dump("10) User::searchForm('Leixe')->execute()->models()");
         dump(User::searchForm('Leixe')->execute()->models());
 
-        dump("User::searchForm('Leixe')->sort('_id', 'desc')->from(1)->size(1)->highlight('name')->execute()->models()");
+        dump("11) User::searchForm('Leixe')->sort('_id', 'desc')->from(1)->size(1)->highlight('name')->execute()->models()");
         dump(User::searchForm('Leixe')->sort('_id', 'desc')->from(1)->size(1)->highlight('name')->execute()->models());
     }
 }
