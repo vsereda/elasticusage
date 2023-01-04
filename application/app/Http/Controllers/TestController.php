@@ -24,7 +24,7 @@ class TestController extends Controller
         $query = [
             'match' => [
                 'name' => [
-                    'query' => 'Lavson',
+                    'query' => 'Leixe',
                     'fuzziness' => 'AUTO'
                 ]
             ]
@@ -59,10 +59,10 @@ class TestController extends Controller
         dump('$document->content()');
         dump($document->content());
 
-        dump("User::searchForm('Lowson')->execute()->models()");
-        dump(User::searchForm('Lowson')->execute()->models());
+        dump("User::searchForm('Leixe')->execute()->models()");
+        dump(User::searchForm('Leixe')->execute()->models());
 
-        dump("User::searchForm('Lowson')->sort('_id', 'desc')->from(1)->size(1)->highlight('name')->execute()->models()");
-        dump(User::searchForm('Lowson')->sort('_id', 'desc')->from(1)->size(1)->highlight('name')->execute()->models());
+        dump("User::searchForm('Leixe')->sort('_id', 'desc')->from(1)->size(1)->highlight('name')->execute()->models()");
+        dump(User::searchForm('Leixe')->sort('_id', 'desc')->from(1)->size(1)->highlight('name')->execute()->models());
     }
 }
