@@ -4,6 +4,8 @@ FROM php:8.1.6-fpm
 ARG user
 ARG uid
 
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
