@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    nodejs
 
 RUN pecl install xdebug-3.1.5
 RUN docker-php-ext-enable xdebug
