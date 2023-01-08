@@ -1,8 +1,26 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
 // Variables
 @import 'variables';
 
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
+.zalupa {
+    font-size: 8px;
+}
+
+.article-wrapper {
+    margin-top: 10px;
+}
+
+p.results-title span {
+    color: red;
+    font-weight: bold;
+}
+
+.article-wrapper article {
+    border: 1px solid black;
+    margin-bottom: 10px;
+}
+
+.article-wrapper h2.article-name span,
+.article-wrapper p.article-body span {
+    color: red;
+    font-weight: bold;
+}
