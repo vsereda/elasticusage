@@ -1,9 +1,9 @@
 добавим в /etc/hosts:
-<p style="color: #F8F8F8; font-weight: bold;">  127.0.0.1	laravel8.org</p>
+<p style="color: #F8F8F8; font-weight: bold;">  127.0.0.1	elasticusage.org</p>
 
 выполним:
-<p style="color: #F8F8F8; font-weight: bold;"> git clone [имя этого репозитоия] laravel8.org </p>
-<p style="color: #F8F8F8; font-weight: bold;"> cd laravel8.org </p>
+<p style="color: #F8F8F8; font-weight: bold;"> git clone [имя этого репозитоия] elasticusage.org </p>
+<p style="color: #F8F8F8; font-weight: bold;"> cd elasticusage.org </p>
 <p style="color: #F8F8F8; font-weight: bold;"> cp application/.env.example application/.env </p>
 
 настроим содержимое .env:
@@ -14,7 +14,7 @@
     DB_DATABASE=db_name
     DB_USERNAME=db_username
     DB_PASSWORD=db_password
-	APP_URL=https://laravel8.org
+	APP_URL=https://elasticusage.org
 
 далее:
 <p style="color: #F8F8F8;">
@@ -37,7 +37,7 @@ docker-compose exec app php artisan key:generate
 
 далее вместо того чтобы каждый раз писать <span  style="color: #F8F8F8; font-weight: bold;">docker-compose exec app</span> можно использовать для входа в контейнер:
 <p style="color: #F8F8F8; font-weight: bold;">
-docker exec -it shop-app bash
+docker exec -it elasticusage-app bash
 </p>
 
 должены быть выполнены миграции и посев данных:

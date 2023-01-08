@@ -9,20 +9,20 @@ services:
         uid: 1000
       context: ./application/
       dockerfile: ../docker-compose/Dockerfile
-    image: shop-app
-    container_name: shop-app
+    image: elasticusage-app
+    container_name: elasticusage-app
 #    restart: unless-stopped
     working_dir: /var/www/
     volumes:
       - ./application/:/var/www
       - ./docker-compose/php/php.ini:/usr/local/etc/php/php.ini
     networks:
-      - shop_network
+      - elasticusage_network
 
   #Nginx Service
   nginx:
     image: nginx:alpine
-    container_name: shop-nginx
+    container_name: elasticusage-nginx
 #    restart: unless-stopped
     ports:
       - 80:80
@@ -30,12 +30,12 @@ services:
       - ./application/:/var/www
       - ./docker-compose/nginx/conf.d/:/etc/nginx/conf.d/
     networks:
-      - shop_network
+      - elasticusage_network
 
   #Mysl Service
   db:
     image: mysql:8.0
-    container_name: shop-db
+    container_name: elasticusage-db
     ports:
         - "3306:3306"
     volumes:
@@ -47,18 +47,18 @@ services:
       MYSQL_PASSWORD: ${DB_PASSWORD}
       MYSQL_USER: ${DB_USERNAME}
     networks:
-      - shop_network
+      - elasticusage_network
 
 #  Elasticsearch service
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
     user: "1000:1000"
-    container_name: shop-elasticsearch
+    container_name: elasticusage-elasticsearch
 #    restart: unless-stopped
     environment:
-      - node.name=shop01
-      - cluster.name=shop-docker-cluster
-      - cluster.initial_master_nodes=shop01
+      - node.name=elasticusage01
+      - cluster.name=elasticusage-docker-cluster
+      - cluster.initial_master_nodes=elasticusage01
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -70,12 +70,12 @@ services:
     volumes:
       - es_01_data:/usr/share/elasticsearch/data
     networks:
-      - shop_network
+      - elasticusage_network
 
 volumes:
   es_01_data:
     driver: local
 
 networks:
-  shop_network:
+  elasticusage_network:
     driver: bridge
