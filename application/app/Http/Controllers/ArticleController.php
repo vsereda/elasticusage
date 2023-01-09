@@ -82,4 +82,34 @@ class ArticleController extends Controller
     {
         //
     }
+
+    public function search(Request $request)
+    {
+        $searchStr = $request->search_string;
+
+        $articles = Article::searchForm($searchStr)
+            ->sort('_id', 'desc')
+            ->from(0)
+            ->size(10)
+            ->highlight('title')
+            ->highlight('body')
+            ->execute();
+        $articles_result = ($articles->hits()->map(function ($item, $key) {
+            $content = $item->document()->content();
+
+            $titleSnippet = $item->highlight()->snippets('title')->first();
+            $bodySnippet = $item->highlight()->snippets('body')->first();
+
+            if ($titleSnippet) {
+                $content['title'] = $titleSnippet;
+            }
+            if ($bodySnippet) {
+                $content['body'] = $bodySnippet;
+            }
+            $content['id'] = $item->document()->id();
+            return $content;
+        }));
+
+        return $articles_result->toArray();
+    }
 }

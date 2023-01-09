@@ -15,7 +15,7 @@ final class CreateArticlesIndex implements MigrationInterface
     {
         Index::create('articles', function (Mapping $mapping, Settings $settings) {
             $mapping->text('title');
-            $mapping->keyword('body');
+            $mapping->text('body');
         });
     }
 
