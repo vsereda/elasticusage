@@ -1,18 +1,28 @@
 <template>
     <div>
-        <h1 class="zalupa">Search articles</h1>
+        <h1 class="zalupa">Search an articles</h1>
         <form v-on:submit.prevent="onFormSubmit">
-            <input type="text">
-            <button v-on:submit.prevent="onFormSubmit">Search</button>
+            <input type="text" name="search-string" :disabled="isArticleLoading" v-model="searchString">
+            <button v-on:submit.prevent="onFormSubmit" :disabled="isArticleLoading">Search</button>
         </form>
-        <p class="results-title" v-if="articles.length > 0">
-            Search results for "<span>name</span>":
+        <template v-if="!isArticleLoading">
+            <p class="results-title" v-if="articles.length > 0">
+                Search results for "<span>{{ searchStringInTitle }}</span>":
+            </p>
+            <p class="results-title" v-else-if="isArticlesDirty && !articleLoadingError">
+                There are no search results for "<span>{{ searchStringInTitle }}</span>":
+            </p>
+            <p class="results-title" v-else-if="isArticlesDirty && articleLoadingError">
+                Search results loading error
+            </p>
+        </template>
+        <p class="results-title" v-else>
+            Loading search results...
         </p>
-        <p class="results-title" v-else-if="isArticlesDirty" >
-            There are no search results for "<span>name</span>":
-        </p>
+
         <div class="article-wrapper">
             <article v-for="item in articles">
+                <p class="item-id">id = {{ item.id }}</p>
                 <h2 class="article-name" v-html="item.title"></h2>
                 <p class="article-body" v-html="item.body"></p>
             </article>
@@ -25,20 +35,35 @@ export default {
     name: "ArticleSearch",
     data: function () {
         return {
+            searchString: '',
+            searchStringInTitle: '',
             articles: [],
             isArticlesDirty: false,
+            isArticleLoading: false,
+            articleLoadingError: false,
         }
     },
     methods: {
-        onFormSubmit() {
-            alert('submit')
+        async onFormSubmit() {
+            try {
+                this.articles = []
+                this.isArticleLoading = true
+                this.isArticlesDirty = true
+                this.searchStringInTitle = ''
+                const response = await axios.post('api/articles/search', {
+                    search_string: this.searchString,
+                },)
+                this.articles = response.data
+            } catch (e) {
+                this.articleLoadingError = true
+            } finally {
+                this.isArticleLoading = false
+                this.searchStringInTitle = this.searchString
+                this.searchString = ''
+            }
         },
     },
     mounted() {
-        this.articles.push(
-            { title: 'Article <span>name</span>', body: 'vjhefg ehdrfhg jkfgverdr jffehjej fejhj <span>name</span> jhekfulegh jehgrfh'},
-            { title: 'Article <span>name</span>', body: 'vjhefg ehdrfhg jkfgverdr jffehjej fejhj <span>name</span> jhekfulegh jehgrfh'},
-        );
     }
 }
 </script>

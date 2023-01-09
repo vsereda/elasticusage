@@ -32,7 +32,7 @@ class TestController1 extends Controller
                 ]
             ]
         ];
-
+/*
         $result = Article::searchQuery($query)
             ->highlight('title')
             ->execute();
@@ -70,8 +70,40 @@ class TestController1 extends Controller
 
         dump("10) Article::searchForm('$input')->execute()->models()");
         dump(Article::searchForm($input)->execute()->models());
+*/
+        dump("11.0) Article::searchForm('$input')->sort('_id', 'desc')->from(1)->size(1)->highlight('title')->execute()");
+        $articles = Article::searchForm($input)
+            ->sort('_id', 'desc')
+            ->from(0)
+            ->size(10)
+            ->highlight('title')
+            ->highlight('body')
+            ->execute();
+        dump('$articles');
+        dump($articles);
 
-        dump("11) Article::searchForm('$input')->sort('_id', 'desc')->from(1)->size(1)->highlight('title')->execute()");
+        $articles_result = ($articles->hits()->map(function ($item, $key) {
+            dump('$item->document()');
+            dump($item->document()->id());
+            dump('document...');
+            dump($content = $item->document()->content());
+            dump('snippet...');
+            $titleSnippet = $item->highlight()->snippets('title')->first();
+            $bodySnippet = $item->highlight()->snippets('body')->first();
+            dump($titleSnippet);
+            dump($bodySnippet);
+            if($titleSnippet){
+                $content['title'] = $titleSnippet;
+            }
+            if($bodySnippet){
+                $content['body'] = $bodySnippet;
+            }
+            return $content;
+        }));
+        dump('----------------------------------------------------------');
+        dump($articles_result->toArray());
+
+        dump("11.1) Article::searchForm('$input')->sort('_id', 'desc')->from(1)->size(1)->highlight('title')->execute()");
         dump(Article::searchForm($input)->sort('_id', 'desc')->from(0)->size(10)->highlight('title')->execute());
 
         dump("12) Article::searchForm('$input')->sort('_id', 'desc')->from(1)->size(1)->highlight('title')->execute()->models()");

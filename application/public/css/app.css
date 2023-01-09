@@ -3,17 +3,30 @@
 }
 
 p.results-title span {
-  color: red;
   font-weight: bold;
 }
 
 .article-wrapper article {
   border: 1px solid black;
   margin-bottom: 10px;
+  padding: 10px 15px 25px 10px;
 }
 
-.article-wrapper h2.article-name span,
-.article-wrapper p.article-body span {
+p.item-id {
+  margin: 10px 0 0 0;
+}
+
+.article-wrapper h2.article-name em,
+.article-wrapper p.article-body em {
   color: red;
   font-weight: bold;
+  font-style: normal;
+}
+
+.article-wrapper h2 {
+  margin: 0;
+}
+
+p.article-body {
+  margin: 15px 0 0 0;
 }
