@@ -1,12 +1,10 @@
 добавим в /etc/hosts:
 <p style="color: #F8F8F8; font-weight: bold;">  127.0.0.1	elasticusage.org</p>
 
-выполним:
-<p style="color: #F8F8F8; font-weight: bold;"> git clone [имя этого репозитоия] elasticusage.org </p>
-<p style="color: #F8F8F8; font-weight: bold;"> cd elasticusage.org </p>
+execute:
 <p style="color: #F8F8F8; font-weight: bold;"> cp application/.env.example application/.env </p>
 
-настроим содержимое .env:
+Set <b>.env</b> values:
 
     APP_NAME=MY
     DB_HOST=db
@@ -16,7 +14,9 @@
     DB_PASSWORD=db_password
 	APP_URL=https://elasticusage.org
 
-далее:
+    ELASTIC_HOST=es:9200
+    SCOUT_DRIVER=elastic
+
 <p style="color: #F8F8F8;">
 The default operating system limits on mmap counts is likely to be too low, which may result in out of memory exceptions.
 To set this value permanently, update the <b><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.17/vm-max-map-count.html">vm.max_map_count</a></b> setting in <b>/etc/sysctl.conf</b>: 
@@ -27,20 +27,19 @@ To set this value permanently, update the <b><a href="https://www.elastic.co/gui
 docker-compose  --env-file ./application/.env up  -d --build
 </p>
 
-<p style="color: #F8F8F8; font-weight: bold;">
-docker-compose exec app composer install
-</p>
-
-<p style="color: #F8F8F8; font-weight: bold;">
-docker-compose exec app php artisan key:generate
-</p>
-
-далее вместо того чтобы каждый раз писать <span  style="color: #F8F8F8; font-weight: bold;">docker-compose exec app</span> можно использовать для входа в контейнер:
+enter into application container:
 <p style="color: #F8F8F8; font-weight: bold;">
 docker exec -it elasticusage-app bash
 </p>
 
-должены быть выполнены миграции и посев данных:
+<p style="color: #F8F8F8; font-weight: bold;">
+composer install
+</p>
+
+<p style="color: #F8F8F8; font-weight: bold;">
+php artisan key:generate
+</p>
+
 <p style="color: #F8F8F8; font-weight: bold;">
 php artisan migrate
 </p>
