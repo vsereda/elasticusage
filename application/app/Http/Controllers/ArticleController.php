@@ -88,11 +88,12 @@ class ArticleController extends Controller
         $searchStr = $request->search_string;
 
         $articles = Article::searchForm($searchStr)
-            ->sort('_id', 'desc')
+            ->sort('_score', 'desc')
             ->from(0)
             ->size(10)
             ->highlight('title')
             ->highlight('body')
+            ->trackScores(true)
             ->execute();
         $articles_result = ($articles->hits()->map(function ($item, $key) {
             $content = $item->document()->content();

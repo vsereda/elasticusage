@@ -26,7 +26,7 @@ final class ArticlaFormQueryBuilder implements QueryBuilderInterface
     {
         return [
             'multi_match' => [
-                'fields' => ["title", "body"],
+                'fields' => ["title^3", "body"],
                 'query' => $this->input,
                 'fuzziness' => 'AUTO',
             ]
