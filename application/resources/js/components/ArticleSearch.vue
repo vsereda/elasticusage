@@ -22,9 +22,9 @@
 
         <div class="article-wrapper">
             <article v-for="item in articles">
-                <p class="item-id">id = {{ item.id }}</p>
-                <h2 class="article-name" v-html="item.title"></h2>
-                <p class="article-body" v-html="item.body"></p>
+                <h2 class="article-name" v-html="item.id.concat('. ', item.title)"></h2>
+                <p class="article-snippets" v-html="item.body_snippets"></p>
+                <p class="article-body">{{ item.body }}</p>
             </article>
         </div>
     </div>

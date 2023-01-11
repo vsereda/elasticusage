@@ -16,13 +16,22 @@ p.results-title span {
     padding: 10px 15px 25px 10px;
 }
 
-p.item-id {
-    margin: 10px 0 0 0;
+.article-wrapper h2.article-name {
+    font-size: 24px;
+    color: $article-text-color;
+    font-weight: 400;
+}
+
+.article-wrapper p.article-snippets {
+    font-size: 15px;
+    font-style: italic;
+    color: $article-text-color;
+    margin: 20px 0 0 0;
 }
 
 .article-wrapper h2.article-name em,
-.article-wrapper p.article-body em {
-    color: red;
+.article-wrapper p.article-snippets em {
+    color: black;
     font-weight: bold;
     font-style: normal;
 }
@@ -33,4 +42,5 @@ p.item-id {
 
 p.article-body {
     margin: 15px 0 0 0;
+    font-size: 18px;
 }

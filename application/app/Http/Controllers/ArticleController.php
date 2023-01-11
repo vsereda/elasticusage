@@ -98,14 +98,18 @@ class ArticleController extends Controller
             $content = $item->document()->content();
 
             $titleSnippet = $item->highlight()->snippets('title')->first();
-            $bodySnippet = $item->highlight()->snippets('body')->first();
+            $bodySnippets = $item->highlight()->snippets('body')
+                ->map(function ($item) {
+                    return $item . '...</br>';
+                })->toArray();
+            $bodySnippetJoined = join('', $bodySnippets);
 
             if ($titleSnippet) {
                 $content['title'] = $titleSnippet;
             }
-            if ($bodySnippet) {
-                $content['body'] = $bodySnippet;
-            }
+
+            $content['body_snippets'] = $bodySnippetJoined;
+
             $content['id'] = $item->document()->id();
             return $content;
         }));
