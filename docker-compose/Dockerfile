@@ -1,8 +1,10 @@
-FROM php:8.1-fpm
+FROM php:8.1.6-fpm
 
 # Arguments defined in docker-compose.yml
 ARG user
 ARG uid
+
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -12,7 +14,11 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    nodejs
+
+RUN pecl install xdebug-3.1.5
+RUN docker-php-ext-enable xdebug
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
