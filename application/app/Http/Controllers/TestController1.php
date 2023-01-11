@@ -9,7 +9,8 @@ class TestController1 extends Controller
 {
     public function test()
     {
-        $input = 'seading';
+        $input = 'clases';
+        $input = 'seading classes';
 
         //        dump(Article::take(5)->get());
 //        dump(Article::search('Kuhlman')->first());
@@ -23,7 +24,6 @@ class TestController1 extends Controller
 //        ;
 
 
-
         $query = [
             'match' => [
                 'title' => [
@@ -32,52 +32,53 @@ class TestController1 extends Controller
                 ]
             ]
         ];
-/*
-        $result = Article::searchQuery($query)
-            ->highlight('title')
-            ->execute();
-        dump('1) $result = Article::searchQuery($query)->highlight(\'title\')->execute()');
-        dump($result);
+        /*
+                $result = Article::searchQuery($query)
+                    ->highlight('title')
+                    ->execute();
+                dump('1) $result = Article::searchQuery($query)->highlight(\'title\')->execute()');
+                dump($result);
 
-        dump('2) $result->models()->all()');
-        dump($result->models()->all());
+                dump('2) $result->models()->all()');
+                dump($result->models()->all());
 
-        dump('3) $result->documents()');
-        dump($result->documents());
+                dump('3) $result->documents()');
+                dump($result->documents());
 
-        $match = $result->hits()->first();
-        dump('4) $match = $result->hits()->first()');
-        dump($match);
+                $match = $result->hits()->first();
+                dump('4) $match = $result->hits()->first()');
+                dump($match);
 
-        $document = $match->document();
-        dump('5) $document = $match->document()');
-        dump($document);
+                $document = $match->document();
+                dump('5) $document = $match->document()');
+                dump($document);
 
-        dump('6) $match->model()');
-        dump($match->model());
+                dump('6) $match->model()');
+                dump($match->model());
 
-        $highlight = $match->highlight();
-        dump('7) $highlight = $match->highlight()');
-        dump($highlight);
+                $highlight = $match->highlight();
+                dump('7) $highlight = $match->highlight()');
+                dump($highlight);
 
-        dump('8) $match->highlight()->snippets(\'title\')');
-        dump($match->highlight()->snippets('title'));
-        dump('8) $highlight->snippets(\'title\')');
-        dump($highlight->snippets('title'));
+                dump('8) $match->highlight()->snippets(\'title\')');
+                dump($match->highlight()->snippets('title'));
+                dump('8) $highlight->snippets(\'title\')');
+                dump($highlight->snippets('title'));
 
-        dump('9) $document->content()');
-        dump($document->content());
+                dump('9) $document->content()');
+                dump($document->content());
 
-        dump("10) Article::searchForm('$input')->execute()->models()");
-        dump(Article::searchForm($input)->execute()->models());
-*/
+                dump("10) Article::searchForm('$input')->execute()->models()");
+                dump(Article::searchForm($input)->execute()->models());
+        */
         dump("11.0) Article::searchForm('$input')->sort('_id', 'desc')->from(1)->size(1)->highlight('title')->execute()");
         $articles = Article::searchForm($input)
-            ->sort('_id', 'desc')
+            ->sort('_score', 'desc')
             ->from(0)
             ->size(10)
             ->highlight('title')
             ->highlight('body')
+            ->trackScores(true)
             ->execute();
         dump('$articles');
         dump($articles);
@@ -88,14 +89,22 @@ class TestController1 extends Controller
             dump('document...');
             dump($content = $item->document()->content());
             dump('snippet...');
-            $titleSnippet = $item->highlight()->snippets('title')->first();
-            $bodySnippet = $item->highlight()->snippets('body')->first();
+            $titleSnippet = $item->highlight()->snippets('title')//                ->first()
+            ;
+            $bodySnippet = $item->highlight()->snippets('body')
+                ->map(function ($item) {
+                    return $item . '...</br>';
+                })->toArray()
+                //                ->first()
+            ;
+            dump('$titleSnippet');
             dump($titleSnippet);
-            dump($bodySnippet);
-            if($titleSnippet){
+            dump('$bodySnippet');
+            dump(join('', $bodySnippet));
+            if ($titleSnippet) {
                 $content['title'] = $titleSnippet;
             }
-            if($bodySnippet){
+            if ($bodySnippet) {
                 $content['body'] = $bodySnippet;
             }
             return $content;
