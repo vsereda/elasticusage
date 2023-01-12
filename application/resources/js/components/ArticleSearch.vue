@@ -3,7 +3,9 @@
         <h1 class="zalupa">Search an articles</h1>
         <form v-on:submit.prevent="onFormSubmit">
             <input type="text" name="search-string" :disabled="isArticleLoading" v-model="searchString">
-            <button v-on:submit.prevent="onFormSubmit" :disabled="isArticleLoading">Search</button>
+            <button v-on:submit.prevent="onFormSubmit" :disabled="isArticleLoading || searchString.length < this.searchStrMinLength">
+                Search
+            </button>
         </form>
         <template v-if="!isArticleLoading">
             <p class="results-title" v-if="articles.length > 0">
@@ -41,6 +43,7 @@ export default {
             isArticlesDirty: false,
             isArticleLoading: false,
             articleLoadingError: false,
+            searchStrMinLength: 2,
         }
     },
     methods: {
