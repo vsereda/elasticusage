@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Article\SearchRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
@@ -83,7 +84,7 @@ class ArticleController extends Controller
         //
     }
 
-    public function search(Request $request)
+    public function search(SearchRequest $request)
     {
         $searchStr = $request->search_string;
 
