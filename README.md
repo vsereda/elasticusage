@@ -55,3 +55,9 @@ php artisan scout:import "App\Models\User"
 <p style="color: #F8F8F8; font-weight: bold;">
 php artisan scout:import "App\Models\Article"
 </p>
+<p style="color: #F8F8F8; font-weight: bold;">
+npm install
+</p>
+<p style="color: #F8F8F8; font-weight: bold;">
+npm run dev
+</p>
