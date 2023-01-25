@@ -26,3 +26,7 @@ Route::controller(TestController::class)->group(function () {
 Route::controller(TestController1::class)->group(function () {
     Route::get('/test1', 'test');
 });
+
+Route::get('{any?}', function () {
+    return view('home');
+})->where('any', '.*');
