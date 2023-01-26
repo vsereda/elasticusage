@@ -7,7 +7,7 @@
 require('./bootstrap');
 
 import { createApp } from 'vue'
-import ArticleSearch from './components/ArticleSearch.vue'
+import ArticleSearch from './pages/ArticleSearch.vue'
 import router from "./router";
 
 /**
