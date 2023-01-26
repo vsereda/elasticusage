@@ -39,6 +39,6 @@ class ArticleSeeder extends Seeder
                 'title' => 'Database: Seeding',
                 'body' => 'Laravel includes a simple method of TEST your database with test data using seed classes. All seed classes are stored in the database/seeds directory. Seed classes may have any name you wish, but probably should follow some sensible convention, such as UsersTableSeeder, etc. By default, a DatabaseSeeder class is defined for you. From this class, you may use the call method to run other seed classes, allowing you to control the TEST order.',
             ]);
-        Article::factory(2)->create();
+        Article::factory(30)->create();
     }
 }
