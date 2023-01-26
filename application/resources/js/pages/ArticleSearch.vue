@@ -1,9 +1,9 @@
 <template>
     <div>
         <h1>Search an articles</h1>
-        <form v-on:submit.prevent="onFormSubmit">
+        <form v-on:submit.prevent="loadSearchResults">
             <input type="text" name="search-string" :disabled="isArticleLoading" v-model="searchString">
-            <button v-on:submit.prevent="onFormSubmit" :disabled="isArticleLoading || searchString.length < this.searchStrMinLength">
+            <button v-on:submit.prevent="loadSearchResults" :disabled="isArticleLoading || searchString.length < this.searchStrMinLength">
                 Search
             </button>
         </form>
@@ -47,7 +47,7 @@ export default {
         }
     },
     methods: {
-        async onFormSubmit() {
+        async loadSearchResults() {
             try {
                 this.articles = []
                 this.isArticleLoading = true
