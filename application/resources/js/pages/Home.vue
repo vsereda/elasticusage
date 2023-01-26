@@ -16,7 +16,7 @@
         </template>
 
         <div class="article-wrapper">
-            <article v-for="item in articles" key="item.id">
+            <article v-for="item in articles" key="item.id" @click="openArticleNewTab(item.id)">
                 <h2 class="article-name" v-html="''.concat(item.id, '. ', item.title)"></h2>
                 <p class="article-body">{{ item.body }}</p>
             </article>
@@ -70,6 +70,10 @@ export default {
         loadLastArticles() {
             this.loadArticles(this?.response?.last_page_url)
         },
+        openArticleNewTab(id) {
+            let route = this.$router.resolve({ name: 'article', params: { id: id } })
+            window.open(route.href, '_blank');
+        }
     },
     watch: {
         response: {

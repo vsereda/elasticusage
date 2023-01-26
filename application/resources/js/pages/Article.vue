@@ -1,10 +1,10 @@
 <template>
-<h1>About page</h1>
+<h1>Article page {{ $route.params.id }}</h1>
 </template>
 
 <script>
 export default {
-    name: "Home"
+    name: "Article"
 }
 </script>
 

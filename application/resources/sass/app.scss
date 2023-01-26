@@ -14,6 +14,11 @@ p.results-title span {
     border: 1px solid black;
     margin-bottom: 10px;
     padding: 10px 15px 25px 10px;
+    cursor: pointer;
+}
+
+.article-wrapper article:hover {
+    background-color: #fafafa;
 }
 
 .article-wrapper h2.article-name {
