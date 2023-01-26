@@ -15,7 +15,7 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+        return Article::orderBy('id', 'desc')->select('id', 'title', 'body')->paginate(5);
     }
 
     /**
