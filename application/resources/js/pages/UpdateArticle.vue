@@ -1,5 +1,5 @@
 <template>
-<h1>Article page {{ $route.params.id }}</h1>
+<h1>Article for update {{ $route.params.id }}</h1>
 </template>
 
 <script>
