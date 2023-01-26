@@ -1,10 +1,20 @@
 <template>
     <div>
-        <h1>List of articles</h1>
-        <button @click="loadFirstArticles" :disabled="!firstPageActive">first</button>
-        <button @click="loadPreviousArticles" :disabled="!prevPageActive">prev</button>
-        <button @click="loadNextArticles" :disabled="!nextPageActive">next</button>
-        <button @click="loadLastArticles" :disabled="!nextPageActive">last</button>
+        <h1>List of articles page {{ response?.current_page ?? 1}}</h1>
+        <button @click="loadFirstArticles" :disabled="!firstPageActive || articles.length === 0">first</button>
+        <button @click="loadPreviousArticles" :disabled="!prevPageActive || articles.length === 0">prev</button>
+        <button @click="loadNextArticles" :disabled="!nextPageActive || articles.length === 0">next</button>
+        <button @click="loadLastArticles" :disabled="!nextPageActive || articles.length === 0">last</button>
+
+        <template v-if="!isArticleLoading">
+            <p class="results-title" v-if="articles.length === 0 && isArticlesDirty && !articleLoadingError">
+                There are no articles
+            </p>
+            <p class="results-title" v-else-if="isArticlesDirty && articleLoadingError">
+                Search results loading error
+            </p>
+        </template>
+
         <div class="article-wrapper">
             <article v-for="item in articles" key="item.id">
                 <h2 class="article-name" v-html="''.concat(item.id, '. ', item.title)"></h2>
@@ -22,6 +32,8 @@ export default {
         return {
             articles: [],
             articleLoadingError: false,
+            isArticlesDirty: false,
+            isArticleLoading: false,
             loadArticlesURL: '/api/articles',
             response: {},
             nextPageActive: false,
@@ -33,6 +45,8 @@ export default {
     methods: {
         async loadArticles(url = this.loadArticlesURL) {
             try {
+                this.isArticleLoading = true
+                this.isArticlesDirty = true
                 const response = await axios.get(url)
                 this.response = response.data
                 if (this?.response?.data?.length > 0) {
@@ -41,7 +55,7 @@ export default {
             } catch (e) {
                 this.articleLoadingError = true
             } finally {
-
+                this.isArticleLoading = false
             }
         },
         loadFirstArticles() {
