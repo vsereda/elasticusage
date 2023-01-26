@@ -18,7 +18,7 @@ const routes = [
 
 const router = createRouter({
     routes,
-    history: createWebHistory(process.env.APP_URL)
+    history: createWebHistory()
 });
 
 export default router;

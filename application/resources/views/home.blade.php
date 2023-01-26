@@ -13,8 +13,6 @@
     <router-link to="/about">About</router-link>
     <hr>
     <router-view></router-view>
-    <hr>
-    <article-search></article-search>
 </div>
 
 <script src="{{ mix('/js/app.js') }}"></script>
