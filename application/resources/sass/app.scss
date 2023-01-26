@@ -44,3 +44,20 @@ p.article-body {
     margin: 15px 0 0 0;
     font-size: 18px;
 }
+
+nav.main-router-wrapper a {
+    color: $article-text-color;
+    margin: 0;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 5px 10px;
+    font-size: 18px;
+}
+
+nav.main-router-wrapper a:hover {
+    color: black;
+}
+
+nav.main-router-wrapper a.router-link-active {
+    color: brown;
+}

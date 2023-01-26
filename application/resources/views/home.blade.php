@@ -9,8 +9,10 @@
 </head>
 <body>
 <div id="app">
-    <router-link to="/">Home</router-link>
-    <router-link to="/about">About</router-link>
+    <nav class="main-router-wrapper">
+        <router-link to="/">HOME</router-link>
+        <router-link to="/about">ABOUT</router-link>
+    </nav>
     <hr>
     <router-view></router-view>
 </div>

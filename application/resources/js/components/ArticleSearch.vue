@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1 class="zalupa">Search an articles</h1>
+        <h1>Search an articles</h1>
         <form v-on:submit.prevent="onFormSubmit">
             <input type="text" name="search-string" :disabled="isArticleLoading" v-model="searchString">
             <button v-on:submit.prevent="onFormSubmit" :disabled="isArticleLoading || searchString.length < this.searchStrMinLength">
