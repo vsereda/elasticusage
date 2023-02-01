@@ -1,5 +1,10 @@
 <template>
     <div>
+        <popup-message
+            :message="'Article '.concat(this.article?.id, ' successfully updated!')"
+            :is-popup-open="isPopupUpdatedOpen"
+            v-on:close-popup="popupClosed"
+        ></popup-message>
         <h1>Article for update {{ $route.params.id }}</h1>
         <div class="article-wrapper">
             <h2 class="load-error" v-show="articleLoadingError">Loading Error!</h2>
@@ -10,8 +15,8 @@
                     <input id="title-edit" class="title-edit" type="text" name="title" v-model="article.title">
                     <label for="body-edit" class="body-label">Body</label>
                     <textarea id="body-edit" class="body-edit" v-model="article.body" rows="10"></textarea>
-                    <button class="save-article" type="submit" :disabled="!isArticleDirty || isArticleUpdating">Save
-                        article
+                    <button class="save-article" type="submit" :disabled="!isArticleDirty || isArticleUpdating">
+                        Save article
                     </button>
                 </form>
             </article>
@@ -21,8 +26,11 @@
 
 <script>
 
+import PopupMessage from "../components/PopupMessage.vue";
+
 export default {
     name: "Article",
+    components: {PopupMessage},
     data: function () {
         return {
             article: {},
@@ -31,6 +39,7 @@ export default {
             isArticleDirty: false,
             isArticleUpdating: false,
             articleUpdateError: false,
+            isPopupUpdatedOpen: false,
         }
     },
     methods: {
@@ -51,9 +60,10 @@ export default {
                 this.isArticleUpdating = true
                 const response = await axios.put('api/articles/'.concat(this.$route.params.id), this.article)
                 if (response.data?.success === true) {
-                    alert('successfully updated')
+                    this.isPopupUpdatedOpen = true
+                    this.isArticleDirty = false
                 }
-                this.articleUpdateError = false;
+                this.articleUpdateError = false
             } catch (e) {
                 this.articleUpdateError = true
             } finally {
@@ -64,6 +74,9 @@ export default {
             if (this.isArticleDirty) {
                 this.updateArticle()
             }
+        },
+        popupClosed() {
+            this.isPopupUpdatedOpen = false
         }
     },
     watch: {

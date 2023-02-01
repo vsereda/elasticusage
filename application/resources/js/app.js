@@ -8,6 +8,8 @@ require('./bootstrap');
 
 import { createApp } from 'vue'
 import ArticleSearch from './pages/ArticleSearch.vue'
+import PopupMessage from "./components/PopupMessage.vue";
+
 import router from "./router";
 
 /**
@@ -30,4 +32,5 @@ import router from "./router";
 const app = createApp({})
 app.use(router)
 app.component('article-search', ArticleSearch)
+app.component('popup-message', PopupMessage)
 app.mount('#app')
