@@ -66,3 +66,22 @@ nav.main-router-wrapper a:hover {
 nav.main-router-wrapper a.router-link-active {
     color: brown;
 }
+
+.article-editor .body-edit, .article-editor .title-edit {
+    width: 100%;
+    padding: 7px 15px;
+}
+
+.article-editor .save-article {
+    margin-top: 5px;
+}
+
+.article-editor label {
+    padding: 5px 15px 5px 0;
+    display: inline-block;
+}
+
+.article-wrapper .update-error, .article-wrapper .load-error {
+    color: red;
+    font-size: 15px;
+}

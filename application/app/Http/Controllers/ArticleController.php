@@ -43,11 +43,11 @@ class ArticleController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function show(Article $article)
     {
-        //
+        return $article->only(['id', 'title', 'body']);
     }
 
     /**
@@ -66,11 +66,11 @@ class ArticleController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
+     * @return array|\Illuminate\Http\Response
      */
     public function update(Request $request, Article $article)
     {
-        //
+        return ['success' => $article->update($request->only('title', 'body'))];
     }
 
     /**
