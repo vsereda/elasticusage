@@ -29,7 +29,7 @@
 import PopupMessage from "../components/PopupMessage.vue";
 
 export default {
-    name: "Article",
+    name: "UpdateArticle",
     components: {PopupMessage},
     data: function () {
         return {
