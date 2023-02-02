@@ -1,10 +1,14 @@
 <template>
     <div id="popup-wrapper" class="overlay-popup-message" v-bind:class="{'popup-opened': isPopupOpen}">
         <div class="popup-message">
-            <h2>Updating article</h2>
+            <h2>{{ h2Message }}</h2>
             <a class="close-popup-message" href="" @click.prevent="this.$emit('close-popup', true)">&times;</a>
             <div class="popup-message-content">
                 {{ message }}
+            </div>
+            <div v-if="enableDialogYN">
+                <button @click.prevent="this.$emit('yes-answer')">Yes</button>
+                <button @click.prevent="this.$emit('no-answer')">No</button>
             </div>
         </div>
     </div>
@@ -18,10 +22,19 @@ export default {
             "type": Boolean,
             "required": true,
         },
+        h2Message: {
+            "type": String,
+            "required": true,
+        },
         message: {
             "type": String,
             "required": true,
-        }
+        },
+        enableDialogYN: {
+            "type": Boolean,
+            "required": false,
+            "default": false,
+        },
     },
     data() {
         return {

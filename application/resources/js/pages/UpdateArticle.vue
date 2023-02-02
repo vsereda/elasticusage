@@ -2,6 +2,7 @@
     <div class="update-article-wrapper">
         <popup-message
             :message="'Article '.concat(this.article?.id, ' successfully updated!')"
+            :h2-message="'Updating article'"
             :is-popup-open="isPopupUpdatedOpen"
             v-on:close-popup="popupClosed"
         ></popup-message>
