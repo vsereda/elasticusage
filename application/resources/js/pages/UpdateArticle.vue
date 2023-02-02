@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <div class="update-article-wrapper">
         <popup-message
             :message="'Article '.concat(this.article?.id, ' successfully updated!')"
             :is-popup-open="isPopupUpdatedOpen"
             v-on:close-popup="popupClosed"
         ></popup-message>
-        <h1>Article for update {{ articleId }}</h1>
+        <h1>Article {{ articleId }} for update</h1>
         <article-editor
             :article="article"
             :article-error="articleUpdateError || articleLoadingError"
@@ -15,6 +15,12 @@
             v-on:set-article-dirty="setArticleDirty"
             v-on:update-article="updateArticle"
         ></article-editor>
+        <a
+            href="#"
+            class="close-article"
+            @click.prevent="popupClosed"
+            v-show="!isPopupUpdatedOpen"
+        ></a>
     </div>
 </template>
 
