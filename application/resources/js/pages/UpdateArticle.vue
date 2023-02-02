@@ -7,8 +7,7 @@
         ></popup-message>
         <h1>Article for update {{ $route.params.id }}</h1>
         <div class="article-wrapper">
-            <h2 class="load-error" v-show="articleLoadingError">Loading Error!</h2>
-            <h2 class="update-error" v-show="articleUpdateError">Updating Error!</h2>
+            <h2 class="load-error" v-show="articleUpdateError || articleLoadingError">{{ articleErrorMessage }}</h2>
             <article class="article-editor">
                 <form @submit.prevent="onSubmit">
                     <label for="title-edit" class="title-label">Title</label>
@@ -34,6 +33,7 @@ export default {
     data: function () {
         return {
             article: {},
+            articleErrorMessage: '',
             isArticleLoading: false,
             articleLoadingError: false,
             isArticleDirty: false,
@@ -50,6 +50,7 @@ export default {
                 this.article = response.data
                 this.isArticleDirty = false
             } catch (e) {
+                this.articleErrorMessage = 'Article load error'
                 this.articleLoadingError = true
             } finally {
                 this.isArticleLoading = false
@@ -65,6 +66,7 @@ export default {
                 }
                 this.articleUpdateError = false
             } catch (e) {
+                this.articleErrorMessage = 'Article update error'
                 this.articleUpdateError = true
             } finally {
                 this.isArticleUpdating = false
