@@ -6,7 +6,7 @@
             <div class="popup-message-content">
                 {{ message }}
             </div>
-            <div v-if="enableDialogYN">
+            <div v-if="enableDialogYN" class="popup-yn-wrapper">
                 <button @click.prevent="this.$emit('yes-answer')">Yes</button>
                 <button @click.prevent="this.$emit('no-answer')">No</button>
             </div>

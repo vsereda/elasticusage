@@ -21,10 +21,19 @@ p.results-title span {
     background-color: #fafafa;
 }
 
+.article-top {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .article-wrapper h2.article-name {
     font-size: 24px;
     color: $article-text-color;
     font-weight: 400;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .article-wrapper p.article-snippets {
@@ -48,6 +57,8 @@ p.results-title span {
 p.article-body {
     margin: 15px 0 0 0;
     font-size: 18px;
+    max-height: 300px;
+    overflow: auto;
 }
 
 nav.main-router-wrapper a {
@@ -109,7 +120,7 @@ nav.main-router-wrapper a.router-link-active {
     content: ' ';
     height: 33px;
     width: 5px;
-    background-color: red;
+    background-color: #333;
 }
 
 .close-article:before {
@@ -118,4 +129,47 @@ nav.main-router-wrapper a.router-link-active {
 
 .close-article:after {
     transform: rotate(-45deg);
+}
+
+.drop-article {
+    position: relative;
+    width: 32px;
+    height: 32px;
+    opacity: 0.7;
+    margin-left: 20px;
+}
+
+.drop-article:hover {
+    opacity: 1;
+}
+
+.drop-article:before, .drop-article:after {
+    position: absolute;
+    left: 15px;
+    content: ' ';
+    height: 33px;
+    width: 5px;
+    background-color: red;
+}
+
+.drop-article:before {
+    transform: rotate(45deg);
+}
+
+.drop-article:after {
+    transform: rotate(-45deg);
+}
+
+.popup-yn-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.popup-yn-wrapper button {
+    margin: 0 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 4px 20px;
 }

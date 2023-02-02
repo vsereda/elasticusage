@@ -86,7 +86,7 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        return ['success' => $article->delete()];
     }
 
     public function search(SearchRequest $request)

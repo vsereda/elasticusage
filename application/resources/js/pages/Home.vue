@@ -1,9 +1,18 @@
 <template>
     <div>
+        <popup-message
+            :message="popupMessage"
+            :h2-message="'Dropping an article'"
+            :is-popup-open="isDropPopupOpen"
+            :enable-dialog-y-n="enableDialogYN"
+            v-on:close-popup="this.isDropPopupOpen = false"
+            v-on:no-answer="this.isDropPopupOpen = false"
+            v-on:yes-answer="confirmedDrop"
+        ></popup-message>
         <update-article
             :article-id="articleIdForEdit"
             v-if="openEdit"
-            v-on:popup-closed="popupClosed"
+            v-on:popup-closed="updatePopupClosed"
         ></update-article>
         <template v-else>
             <h1>List of articles page {{ response?.current_page ?? 1 }}</h1>
@@ -23,7 +32,16 @@
 
             <div class="article-wrapper">
                 <article v-for="item in articles" key="item.id" @click="openArticle(item.id)">
-                    <h2 class="article-name" v-html="''.concat(item.id, '. ', item.title)"></h2>
+                    <div class="article-top">
+                        <h2 class="article-name" v-html="''.concat(item.id, '. ', item.title)"></h2>
+                        <a
+                            href="#"
+                            class="drop-article"
+                            @click.prevent.stop="clickDropButton(item.id)"
+                            title="Drop this article"
+                            v-show="!isDropPopupOpen"
+                        ></a>
+                    </div>
                     <p class="article-body">{{ item.body }}</p>
                 </article>
             </div>
@@ -34,25 +52,31 @@
 <script>
 
 import UpdateArticle from "./UpdateArticle.vue";
+import PopupMessage from "../components/PopupMessage.vue";
 
 export default {
     name: "Home",
-    components: {UpdateArticle},
+    components: {PopupMessage, UpdateArticle},
     data: function () {
         return {
-            articles: [],
             articleIdForEdit: 1,
+            articleIdForDrop: 1,
             articleLoadingError: false,
+            articles: [],
             currentPageUrl: '',
-            isArticlesDirty: false,
-            isArticleLoading: false,
-            loadArticlesURL: '/api/articles',
-            response: {},
-            nextPageActive: false,
-            prevPageActive: false,
+            dropArticleURL: '/api/articles',
+            enableDialogYN: false,
             firstPageActive: false,
+            isArticleLoading: false,
+            isArticlesDirty: false,
+            isDropPopupOpen: false,
             lastPageActive: false,
+            loadArticlesURL: '/api/articles',
+            nextPageActive: false,
             openEdit: false,
+            popupMessage: '',
+            prevPageActive: false,
+            response: {},
         }
     },
     methods: {
@@ -71,6 +95,26 @@ export default {
             } finally {
                 this.isArticleLoading = false
             }
+        },
+        async confirmedDrop() {
+            this.enableDialogYN = false
+            try {
+                const response = await axios.delete(this.dropArticleURL.concat('/', this.articleIdForDrop))
+                if (response?.data?.success === true) {
+                    this.loadCurrentArticles()
+                    this.popupMessage = 'Article '.concat(this.articleIdForDrop, ' successfully deleted!')
+                }
+            } catch (e) {
+                this.articleLoadingError = true
+            } finally {
+                this.isArticleLoading = false
+            }
+        },
+        clickDropButton(id) {
+            this.articleIdForDrop = id
+            this.popupMessage = 'Do you really want to drop article '. concat(id, '?')
+            this.enableDialogYN = true
+            this.isDropPopupOpen = true
         },
         loadCurrentArticles() {
             this.loadArticles(this.currentPageUrl)
@@ -91,7 +135,7 @@ export default {
             this.articleIdForEdit = id
             this.openEdit = true
         },
-        popupClosed() {
+        updatePopupClosed() {
             this.loadCurrentArticles()
             this.openEdit = false
         }
@@ -114,5 +158,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
