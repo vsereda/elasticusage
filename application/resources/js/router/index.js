@@ -13,10 +13,10 @@ const routes = [
     {
         path: '/articles/create',
         component: Article,
-        name: 'article',
+        name: 'article.create',
     },
     {
-        path: '/articles/:id',
+        path: '/articles/:id(\\d+)',
         component: Article,
         name: 'article',
     },
