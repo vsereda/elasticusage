@@ -71,7 +71,7 @@ export default {
             this.loadArticles(this?.response?.last_page_url)
         },
         openArticleNewTab(id) {
-            let route = this.$router.resolve({ name: 'article', params: { id: id } })
+            let route = this.$router.resolve({ name: 'article.edit', params: { id: id } })
             window.open(route.href, '_blank');
         }
     },
