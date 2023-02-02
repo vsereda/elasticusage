@@ -21,6 +21,7 @@
             class="close-article"
             @click.prevent="popupClosed"
             v-show="!isPopupUpdatedOpen"
+            title="Close this article"
         ></a>
     </div>
 </template>

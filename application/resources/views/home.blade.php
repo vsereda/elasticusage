@@ -10,9 +10,9 @@
 <body>
 <div id="app">
     <nav class="main-router-wrapper">
-        <router-link to="/">HOME</router-link>
-        <router-link to="/articles/create">NEW ARTICLE</router-link>
-        <router-link to="/articles/search">SEARCH ARTICLES</router-link>
+        <router-link to="/">Home</router-link>
+        <router-link to="/articles/create">New article</router-link>
+        <router-link to="/articles/search">Search articles</router-link>
     </nav>
     <hr>
     <router-view></router-view>
