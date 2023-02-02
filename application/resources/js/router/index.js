@@ -17,11 +17,6 @@ const routes = [
         name: 'article.create',
     },
     {
-        path: '/articles/:id(\\d+)',
-        component: UpdateArticle,
-        name: 'article.edit',
-    },
-    {
         path: '/articles/search',
         component: ArticleSearch,
         name: 'article.search',

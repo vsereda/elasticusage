@@ -5,7 +5,7 @@
             :is-popup-open="isPopupUpdatedOpen"
             v-on:close-popup="popupClosed"
         ></popup-message>
-        <h1>Article for update {{ $route.params.id }}</h1>
+        <h1>Article for update {{ articleId }}</h1>
         <article-editor
             :article="article"
             :article-error="articleUpdateError || articleLoadingError"
@@ -26,6 +26,12 @@ import ArticleEditor from "../components/ArticleEditor.vue";
 export default {
     name: "UpdateArticle",
     components: {ArticleEditor, PopupMessage},
+    props: {
+        articleId: {
+            "type": Number,
+            "required": true,
+        }
+    },
     data: function () {
         return {
             article: {},
@@ -42,7 +48,7 @@ export default {
         async loadArticle() {
             try {
                 this.isArticleLoading = true
-                const response = await axios.get('api/articles/'.concat(this.$route.params.id))
+                const response = await axios.get('api/articles/'.concat(this.articleId))
                 this.article = response.data
                 this.isArticleDirty = false
             } catch (e) {
@@ -55,7 +61,7 @@ export default {
         async updateArticle(articleNewVersion) {
             try {
                 this.isArticleUpdating = true
-                const response = await axios.put('api/articles/'.concat(this.$route.params.id), articleNewVersion)
+                const response = await axios.put('api/articles/'.concat(this.articleId), articleNewVersion)
                 if (response.data?.success === true) {
                     this.isPopupUpdatedOpen = true
                     this.isArticleDirty = false
@@ -75,6 +81,7 @@ export default {
         },
         popupClosed() {
             this.isPopupUpdatedOpen = false
+            this.$emit('popup-closed')
         },
         setArticleDirty(isDirty) {
             this.isArticleDirty = isDirty
