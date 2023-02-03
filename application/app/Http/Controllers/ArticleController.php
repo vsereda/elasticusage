@@ -51,7 +51,7 @@ class ArticleController extends Controller
             ->highlight('body')
             ->trackScores(true)
             ->execute();
-        $articles_result = ($articles->hits()->map(function ($item, $key) {
+        $articlesResult = ($articles->hits()->map(function ($item, $key) {
             $content = $item->document()->content();
 
             $titleSnippet = $item->highlight()->snippets('title')->first();
@@ -71,6 +71,6 @@ class ArticleController extends Controller
             return $content;
         }));
 
-        return $articles_result->toArray();
+        return $articlesResult->toArray();
     }
 }
