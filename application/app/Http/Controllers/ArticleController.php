@@ -17,12 +17,12 @@ class ArticleController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $articleId = Article::insertGetId([
-            'title' => $request->title,
-            'body' => $request->body,
-        ]);
+        $article = Article::create(['title' => $request->title, 'body' => $request->body, ]);
 
-        return ['success' => $articleId > 0, 'article_id' => $articleId];
+        $success = $article instanceof Article;
+        $articleId = $success ? $article->id : 0;
+
+        return ['success' => $success, 'article_id' => $articleId];
     }
 
     public function show(Article $article)
