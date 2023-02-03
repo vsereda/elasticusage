@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Article\SearchRequest;
+use App\Http\Requests\Article\StoreRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class ArticleController extends Controller
         return Article::orderBy('id', 'desc')->select('id', 'title', 'body')->paginate(5);
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $articleId = Article::insertGetId([
             'title' => $request->title,
