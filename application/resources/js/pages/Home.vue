@@ -105,9 +105,8 @@ export default {
                     this.popupMessage = 'Article '.concat(this.articleIdForDrop, ' successfully deleted!')
                 }
             } catch (e) {
-                this.articleLoadingError = true
+                this.popupMessage = 'Drop article error!'
             } finally {
-                this.isArticleLoading = false
             }
         },
         clickDropButton(id) {
