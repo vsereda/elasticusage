@@ -2,6 +2,10 @@
 @import 'variables';
 @import "reset";
 
+#app {
+    padding: 0 300px;
+}
+
 .article-wrapper {
     margin-top: 10px;
 }
@@ -172,4 +176,13 @@ nav.main-router-wrapper a.router-link-active {
     border-radius: 5px;
     border: 1px solid #ccc;
     padding: 4px 20px;
+}
+
+.article-search-wrapper .search-field-error {
+    border: 2px solid red;
+}
+.article-search-wrapper p.search-valid-error {
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
 }

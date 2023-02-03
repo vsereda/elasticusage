@@ -1,12 +1,21 @@
 <template>
-    <div>
+    <div class="article-search-wrapper">
         <h1>Search an articles</h1>
         <form v-on:submit.prevent="loadSearchResults">
-            <input type="text" name="search-string" :disabled="isArticleLoading" v-model="searchString">
-            <button v-on:submit.prevent="loadSearchResults" :disabled="isArticleLoading || searchString.length < this.searchStrMinLength">
+            <input
+                type="text"
+                name="search-string"
+                :disabled="isArticleLoading"
+                v-model="searchString"
+                :class="{ 'search-field-error': v$.searchString.$errors.length }"
+            >
+            <button v-on:submit.prevent="loadSearchResults" :disabled="isArticleLoading">
                 Search
             </button>
         </form>
+        <div class="input-errors" v-for="(error, index) of v$.searchString.$errors" :key="index">
+            <p class="search-valid-error">{{ error.$message }}</p>
+        </div>
         <template v-if="!isArticleLoading">
             <p class="results-title" v-if="articles.length > 0">
                 Search results for "<span>{{ searchStringInTitle }}</span>":
@@ -33,41 +42,59 @@
 </template>
 
 <script>
+import useValidate from '@vuelidate/core'
+import {required, minLength, maxLength} from '@vuelidate/validators'
+
 export default {
     name: "ArticleSearch",
     data: function () {
         return {
+            v$: useValidate(),
             searchString: '',
             searchStringInTitle: '',
             articles: [],
             isArticlesDirty: false,
             isArticleLoading: false,
             articleLoadingError: false,
-            searchStrMinLength: 2,
         }
     },
     methods: {
         async loadSearchResults() {
-            try {
-                this.articles = []
-                this.isArticleLoading = true
-                this.isArticlesDirty = true
-                this.searchStringInTitle = ''
-                const response = await axios.post('api/articles/search', {
-                    search_string: this.searchString,
-                },)
-                this.articles = response.data
-            } catch (e) {
-                this.articleLoadingError = true
-            } finally {
-                this.isArticleLoading = false
-                this.searchStringInTitle = this.searchString
-                this.searchString = ''
+            this.v$.$validate()
+            if (!this.v$.$error) {
+                try {
+                    this.articles = []
+                    this.isArticleLoading = true
+                    this.isArticlesDirty = true
+                    this.searchStringInTitle = ''
+                    const response = await axios.post('api/articles/search', {
+                        search_string: this.searchString,
+                    },)
+                    this.articles = response.data
+                } catch (e) {
+                    this.articleLoadingError = true
+                } finally {
+                    this.isArticleLoading = false
+                    this.searchStringInTitle = this.searchString
+                    this.searchString = ''
+                    this.v$.$reset()
+                }
+            } else {
+                // Form failed validation
             }
         },
     },
+    validations() {
+        return {
+            searchString: {
+                required,
+                min: minLength(3),
+                max: maxLength(100),
+            },
+        }
+    },
     mounted() {
-    }
+    },
 }
 </script>
 
