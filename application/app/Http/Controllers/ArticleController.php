@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Article\SearchRequest;
 use App\Http\Requests\Article\StoreRequest;
+use App\Http\Requests\Article\UpdateRequest;
 use App\Models\Article;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,7 @@ class ArticleController extends Controller
         return $article->only(['id', 'title', 'body']);
     }
 
-    public function update(Request $request, Article $article)
+    public function update(UpdateRequest $request, Article $article)
     {
         return ['success' => $article->update($request->only('title', 'body'))];
     }
