@@ -15,9 +15,5 @@ use \App\Http\Controllers\ArticleController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::post('/articles/search', [ArticleController::class, 'search'])->name('article.search');
+Route::post('/articles/search', [ArticleController::class, 'search'])->name('articles.search');
 Route::apiResource('articles', ArticleController::class);
