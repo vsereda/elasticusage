@@ -186,3 +186,22 @@ nav.main-router-wrapper a.router-link-active {
     font-size: 14px;
     font-weight: bold;
 }
+
+.editor-form-group {
+    margin: 0 0 7px 0;
+    padding: 10px;
+    border: 2px solid #ff000000;
+    opacity: 1;
+}
+
+.editor-title-error, .editor-body-error {
+    color: red;
+    border-color: #ff0000ff;
+    font-size: 14px;
+    font-weight: bold;
+}
+.body-label, .title-label {
+    color: black;
+    font-size: 16px;
+    font-weight: normal;
+}

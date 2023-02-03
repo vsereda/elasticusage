@@ -3,11 +3,33 @@
         <h2 class="load-error" v-show="articleError">{{ articleErrorMessage }}</h2>
         <article class="article-editor">
             <form @submit.prevent="onSubmit">
-                <label for="title-edit" class="title-label">Title</label>
-                <input id="title-edit" class="title-edit" type="text" name="title" v-model="article.title">
-                <label for="body-edit" class="body-label">Body</label>
-                <textarea id="body-edit" class="body-edit" v-model="article.body" rows="10"></textarea>
-                <button class="save-article" type="submit" :disabled="!isArticleDirty || isArticleUpdating">
+                <div class="editor-form-group" :class="{ 'editor-title-error': v$.article.title.$errors.length }">
+                    <label for="title-edit" class="title-label">Title</label>
+                    <span
+                        class="editor-field-error"
+                        v-for="(error, index) of v$.article.title.$errors"
+                        :key="index"
+                    >
+                        {{ error.$message }}
+                    </span>
+                    <input id="title-edit" class="title-edit" type="text" name="title" v-model="article.title">
+                </div>
+                <div class="editor-form-group" :class="{ 'editor-body-error': v$.article.body.$errors.length }">
+                    <label for="body-edit" class="body-label">Body</label>
+                    <span
+                        class="editor-field-error"
+                        v-for="(error, index) of v$.article.body.$errors"
+                        :key="index"
+                    >
+                        {{ error.$message }}
+                    </span>
+                    <textarea id="body-edit" class="body-edit" v-model="article.body" rows="10"></textarea>
+                </div>
+                <button
+                    class="save-article"
+                    type="submit"
+                    :disabled="!canSubmit()"
+                >
                     Save article
                 </button>
             </form>
@@ -16,8 +38,16 @@
 </template>
 
 <script>
+import {required, minLength, maxLength} from '@vuelidate/validators'
+import useValidate from "@vuelidate/core";
+
 export default {
     name: "ArticleEditor",
+    data: function () {
+        return {
+            v$: useValidate(),
+        }
+    },
     props: {
         article: {
             "type": Object,
@@ -42,10 +72,20 @@ export default {
     },
     methods: {
         onSubmit() {
-            if (this.isArticleDirty) {
-                this.$emit('update-article', this.article)
+            if (this.canSubmit()) {
+                this.v$.$validate()
+                if (!this.v$.$error) {
+                    this.$emit('update-article', this.article)
+                    this.v$.$reset()
+                } else {
+                    // validation failed
+                }
+            } else {
             }
         },
+        canSubmit() {
+            return !(!(this.isArticleDirty) || (this.isArticleUpdating))
+        }
     },
     watch: {
         article: {
@@ -55,6 +95,22 @@ export default {
                 }
             },
             deep: true
+        }
+    },
+    validations() {
+        return {
+            article: {
+                title: {
+                    required,
+                    min: minLength(3),
+                    max: maxLength(255),
+                },
+                body: {
+                    required,
+                    min: minLength(3),
+                    max: maxLength(2000),
+                },
+            },
         }
     },
 }
