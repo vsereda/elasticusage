@@ -49,9 +49,7 @@ php artisan elastic:migrate
 <p style="color: #F8F8F8; font-weight: bold;">
 php artisan db:seed
 </p>
-<p style="color: #F8F8F8; font-weight: bold;">
-php artisan scout:import "App\Models\User"
-</p>
+
 <p style="color: #F8F8F8; font-weight: bold;">
 php artisan scout:import "App\Models\Article"
 </p>
