@@ -21,8 +21,10 @@
             class="close-article"
             @click.prevent="popupClosed"
             v-show="!isPopupUpdatedOpen"
-            title="Close this article"
         ></a>
+        <span class="close-article-title" v-show="!isPopupUpdatedOpen">
+            Close
+        </span>
     </div>
 </template>
 
