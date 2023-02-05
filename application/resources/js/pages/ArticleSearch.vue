@@ -1,61 +1,72 @@
 <template>
     <div class="article-search-wrapper">
-        <h1>Search an articles</h1>
-        <form v-on:submit.prevent="loadSearchResults">
-            <input
-                type="text"
-                name="search-string"
-                :disabled="isArticleLoading"
-                v-model="searchString"
-                :class="{ 'search-field-error': v$.searchString.$errors.length }"
-            >
-            <button v-on:submit.prevent="loadSearchResults" :disabled="isArticleLoading">
-                Search
-            </button>
-        </form>
-        <div class="input-errors" v-for="(error, index) of v$.searchString.$errors" :key="index">
-            <p class="search-valid-error">{{ error.$message }}</p>
-        </div>
-        <template v-if="!isArticleLoading">
-            <p class="results-title" v-if="articles.length > 0">
-                Search results for "<span>{{ searchStringInTitle }}</span>":
+        <update-article
+            :article-id="articleIdForEdit"
+            v-if="openEdit"
+            v-on:popup-closed="this.openEdit = false"
+        ></update-article>
+        <template v-else>
+            <h1>Search an articles</h1>
+            <form v-on:submit.prevent="loadSearchResults">
+                <input
+                    type="text"
+                    name="search-string"
+                    :disabled="isArticleLoading"
+                    v-model="searchString"
+                    :class="{ 'search-field-error': v$.searchString.$errors.length }"
+                >
+                <button v-on:submit.prevent="loadSearchResults" :disabled="isArticleLoading">
+                    Search
+                </button>
+            </form>
+            <div class="input-errors" v-for="(error, index) of v$.searchString.$errors" :key="index">
+                <p class="search-valid-error">{{ error.$message }}</p>
+            </div>
+            <template v-if="!isArticleLoading">
+                <p class="results-title" v-if="articles.length > 0">
+                    Search results for "<span>{{ searchStringInTitle }}</span>":
+                </p>
+                <p class="results-title" v-else-if="isArticlesDirty && !articleLoadingError">
+                    There are no search results for "<span>{{ searchStringInTitle }}</span>":
+                </p>
+                <p class="results-title" v-else-if="isArticlesDirty && articleLoadingError">
+                    Search results loading error
+                </p>
+            </template>
+            <p class="results-title" v-else>
+                Loading search results...
             </p>
-            <p class="results-title" v-else-if="isArticlesDirty && !articleLoadingError">
-                There are no search results for "<span>{{ searchStringInTitle }}</span>":
-            </p>
-            <p class="results-title" v-else-if="isArticlesDirty && articleLoadingError">
-                Search results loading error
-            </p>
-        </template>
-        <p class="results-title" v-else>
-            Loading search results...
-        </p>
 
-        <div class="article-wrapper">
-            <article v-for="item in articles">
-                <h2 class="article-name" v-html="item.id.concat('. ', item.title)"></h2>
-                <p class="article-snippets" v-html="item.body_snippets"></p>
-                <p class="article-body">{{ item.body }}</p>
-            </article>
-        </div>
+            <div class="article-wrapper">
+                <article v-for="item in articles" key="item.id" @click="openArticle(item.id)">
+                    <h2 class="article-name" v-html="item.id.concat('. ', item.title)"></h2>
+                    <p class="article-snippets" v-html="item.body_snippets"></p>
+                    <p class="article-body">{{ item.body }}</p>
+                </article>
+            </div>
+        </template>
     </div>
 </template>
 
 <script>
 import useValidate from '@vuelidate/core'
+import UpdateArticle from "./UpdateArticle.vue";
 import {required, minLength, maxLength} from '@vuelidate/validators'
 
 export default {
     name: "ArticleSearch",
+    components: {UpdateArticle,},
     data: function () {
         return {
             v$: useValidate(),
+            articleIdForEdit: 1,
             searchString: '',
             searchStringInTitle: '',
             articles: [],
             isArticlesDirty: false,
             isArticleLoading: false,
             articleLoadingError: false,
+            openEdit: false,
         }
     },
     methods: {
@@ -82,6 +93,10 @@ export default {
             } else {
                 // Form failed validation
             }
+        },
+        openArticle(id) {
+            this.articleIdForEdit = id
+            this.openEdit = true
         },
     },
     validations() {
