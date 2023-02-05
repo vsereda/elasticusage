@@ -6,7 +6,7 @@
             :is-popup-open="isPopupUpdatedOpen"
             v-on:close-popup="popupClosed"
         ></popup-message>
-        <h1>Article {{ articleId }} for update</h1>
+        <h1>Update article {{ articleId }}</h1>
         <article-editor
             :article="article"
             :article-error="articleUpdateError || articleLoadingError"
