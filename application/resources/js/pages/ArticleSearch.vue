@@ -3,7 +3,7 @@
         <update-article
             :article-id="articleIdForEdit"
             v-if="openEdit"
-            v-on:popup-closed="this.openEdit = false"
+            v-on:popup-closed="updatePopupClosed"
         ></update-article>
         <template v-else>
             <h1>Search an articles</h1>
@@ -95,9 +95,14 @@ export default {
             }
         },
         openArticle(id) {
-            this.articleIdForEdit = id
+            this.articleIdForEdit = parseInt(id)
             this.openEdit = true
         },
+        updatePopupClosed() {
+            this.searchString = this.searchStringInTitle
+            this.loadSearchResults()
+            this.openEdit = false
+        }
     },
     validations() {
         return {
