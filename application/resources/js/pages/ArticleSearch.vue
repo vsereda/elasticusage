@@ -7,7 +7,7 @@
         ></update-article>
         <template v-else>
             <h1>Search an articles</h1>
-            <form v-on:submit.prevent="loadSearchResults">
+            <form v-on:submit.prevent="loadSearchResults" class="search-articles-form">
                 <input
                     type="text"
                     name="search-string"
