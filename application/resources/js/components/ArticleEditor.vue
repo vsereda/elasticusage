@@ -25,13 +25,15 @@
                     </span>
                     <textarea id="body-edit" class="body-edit" v-model="article.body" rows="10"></textarea>
                 </div>
-                <button
-                    class="save-article"
-                    type="submit"
-                    :disabled="!canSubmit()"
-                >
-                    Save article
-                </button>
+                <div class="editor-form-group">
+                    <button
+                        class="save-article"
+                        type="submit"
+                        :disabled="!canSubmit()"
+                    >
+                        Save article
+                    </button>
+                </div>
             </form>
         </article>
     </div>
