@@ -82,6 +82,35 @@ nav.main-router-wrapper a.router-link-active {
     color: brown;
 }
 
+.articles-list-paginator {
+    margin: 0;
+    padding: 20px 0 0 0;
+}
+
+.articles-list-paginator button {
+    padding: 0;
+    margin: 0 10px 0 0;
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.articles-list-paginator button:disabled {
+    color: #777;
+    cursor: default;
+}
+
+.articles-list-paginator button:first-child {
+    padding-left: 0;
+}
+
+.articles-list-paginator button:last-child {
+    padding-right: 0;
+}
+
 .article-editor .body-edit, .article-editor .title-edit {
     width: 100%;
     padding: 7px 15px;

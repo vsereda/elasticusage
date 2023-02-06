@@ -9,18 +9,15 @@
             v-on:no-answer="this.isDropPopupOpen = false"
             v-on:yes-answer="confirmedDrop"
         ></popup-message>
-        <update-article
-            :article-id="articleIdForEdit"
-            v-if="openEdit"
-            v-on:popup-closed="updatePopupClosed"
-        ></update-article>
+        <update-article :article-id="articleIdForEdit" v-if="openEdit" v-on:popup-closed="updatePopupClosed"></update-article>
         <template v-else>
             <h1>List of articles page {{ response?.current_page ?? 1 }}</h1>
-            <button @click="loadFirstArticles" :disabled="!firstPageActive || articles.length === 0">first</button>
-            <button @click="loadPreviousArticles" :disabled="!prevPageActive || articles.length === 0">prev</button>
-            <button @click="loadNextArticles" :disabled="!nextPageActive || articles.length === 0">next</button>
-            <button @click="loadLastArticles" :disabled="!nextPageActive || articles.length === 0">last</button>
-
+            <nav class="articles-list-paginator">
+                <button @click="loadFirstArticles" :disabled="!firstPageActive || articles.length === 0">first</button>
+                <button @click="loadPreviousArticles" :disabled="!prevPageActive || articles.length === 0">previous</button>
+                <button @click="loadNextArticles" :disabled="!nextPageActive || articles.length === 0">next</button>
+                <button @click="loadLastArticles" :disabled="!nextPageActive || articles.length === 0">last</button>
+            </nav>
             <template v-if="!isArticleLoading">
                 <p class="results-title" v-if="articles.length === 0 && isArticlesDirty && !articleLoadingError">
                     There are no articles
@@ -113,7 +110,7 @@ export default {
         },
         clickDropButton(id) {
             this.articleIdForDrop = id
-            this.popupMessage = 'Do you really want to drop article '. concat(id, '?')
+            this.popupMessage = 'Do you really want to drop article '.concat(id, '?')
             this.enableDialogYN = true
             this.isDropPopupOpen = true
         },
