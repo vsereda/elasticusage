@@ -34,13 +34,15 @@
                 <article v-for="item in articles" key="item.id" @click="openArticle(item.id)">
                     <div class="article-top">
                         <h2 class="article-name" v-html="''.concat(item.id, '. ', item.title)"></h2>
-                        <a
-                            href="#"
-                            class="drop-article"
-                            @click.prevent.stop="clickDropButton(item.id)"
-                            title="Drop this article"
-                            v-show="!isDropPopupOpen"
-                        ></a>
+                        <div class="drop-button-wrapper" v-show="!isDropPopupOpen">
+                            <a
+                                href="#"
+                                class="drop-article"
+                                @click.prevent.stop="clickDropButton(item.id)"
+                                title="Drop this article"
+                            ></a>
+                            <span class="drop-article-title">Drop</span>
+                        </div>
                     </div>
                     <p class="article-body">{{ item.body }}</p>
                 </article>

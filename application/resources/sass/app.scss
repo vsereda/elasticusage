@@ -101,6 +101,14 @@ nav.main-router-wrapper a.router-link-active {
     font-size: 15px;
 }
 
+.drop-button-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 250px;
+    justify-content: flex-end;
+}
+
 .update-article-wrapper {
     position: relative;
 }
@@ -162,15 +170,24 @@ nav.main-router-wrapper a.router-link-active {
     height: 32px;
     opacity: 0.7;
     margin-left: 20px;
+    right: -50px;
 }
 
-.drop-article:hover {
+.drop-article-title {
+    position: relative;
+    right: 38px;
+    color: red;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.drop-article:hover, .drop-article:hover + .drop-article-title {
     opacity: 1;
 }
 
 .drop-article:before, .drop-article:after {
     position: absolute;
-    left: 15px;
     content: ' ';
     height: 33px;
     width: 5px;
