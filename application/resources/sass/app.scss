@@ -79,7 +79,11 @@ nav.main-router-wrapper a:hover {
 }
 
 nav.main-router-wrapper a.router-link-active {
-    color: brown;
+    color: #777;
+}
+
+nav.main-router-wrapper a:first-child {
+    padding-left: 0;
 }
 
 .articles-list-paginator {
