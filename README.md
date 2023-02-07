@@ -1,61 +1,86 @@
-добавим в /etc/hosts:
-<p style="color: #F8F8F8; font-weight: bold;">  127.0.0.1	elasticusage.org</p>
+## Introduction
 
-execute:
-<p style="color: #F8F8F8; font-weight: bold;"> cp application/.env.example application/.env </p>
+This is my pet-project implementing basic Elasticsearch usage, using [babenkoivan/elastic-scout-driver-plus](https://github.com/babenkoivan/elastic-scout-driver-plus) package and CRUD SPA on vue-js.
 
-Set <b>.env</b> values:
+## Requirements
 
-    APP_NAME=MY
+Docker, Docker Compose
+
+## installation
+
+Register host on your local machine. Open <span style="color: #F8F8F8">/etc/hosts</span> file. Add parameter:
+
+```
+127.0.0.1	elasticusage.org
+```
+
+Type in terminal:
+
+```bash
+cp application/.env.example application/.env
+```
+
+Set <b>.env</b> file values:
+
+```dotenv
+    APP_NAME=ElastickUsage
     DB_HOST=db
     DB_PORT=3306
     DB_DATABASE=db_name
     DB_USERNAME=db_username
     DB_PASSWORD=db_password
-	APP_URL=https://elasticusage.org
+    APP_URL=http://elasticusage.org
 
     ELASTIC_HOST=es:9200
     SCOUT_DRIVER=elastic
+```
 
-<p style="color: #F8F8F8;">
 The default operating system limits on mmap counts is likely to be too low, which may result in out of memory exceptions.
-To set this value permanently, update the <b><a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.17/vm-max-map-count.html">vm.max_map_count</a></b> setting in <b>/etc/sysctl.conf</b>: 
-<b>vm.max_map_count=262144</b>
-</p>
+To set this value permanently, update the [vm.max_map_count](https://www.elastic.co/guide/en/elasticsearch/reference/7.17/vm-max-map-count.html) setting in <span style="color: #F8F8F8;">/etc/sysctl.conf: 
+</span>vm.max_map_count=262144
 
-<p style="color: #F8F8F8; font-weight: bold;">
+Then type:
+
+```bash
 docker-compose  --env-file ./application/.env up  -d --build
-</p>
+```
 
-enter into application container:
-<p style="color: #F8F8F8; font-weight: bold;">
+Enter into application container:
+
+```bash
 docker exec -it elasticusage-app bash
-</p>
+```
 
-<p style="color: #F8F8F8; font-weight: bold;">
+Next commands you will use in app container:
+
+```bash
 composer install
-</p>
+```
 
-<p style="color: #F8F8F8; font-weight: bold;">
+```bash
 php artisan key:generate
-</p>
+```
 
-<p style="color: #F8F8F8; font-weight: bold;">
+```bash
 php artisan migrate
-</p>
-<p style="color: #F8F8F8; font-weight: bold;">
-php artisan elastic:migrate
-</p>
-<p style="color: #F8F8F8; font-weight: bold;">
-php artisan db:seed
-</p>
+```
 
-<p style="color: #F8F8F8; font-weight: bold;">
+```bash
+php artisan elastic:migrate
+```
+
+```bash
+php artisan db:seed
+```
+
+```bash
 php artisan scout:import "App\Models\Article"
-</p>
-<p style="color: #F8F8F8; font-weight: bold;">
+```
+
+```bash
 npm install
-</p>
-<p style="color: #F8F8F8; font-weight: bold;">
+```
+
+```bash
 npm run dev
-</p>
+```
