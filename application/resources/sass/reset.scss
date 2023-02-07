@@ -24,6 +24,8 @@ html, body {
 body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    min-width: 1400px;
+    font-family: Arial, Tahoma, sans-serif;
 }
 /*
   6. Improve media defaults
@@ -49,4 +51,20 @@ p, h1, h2, h3, h4, h5, h6 {
 */
 #root, #__next {
     isolation: isolate;
+}
+
+h1 {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+hr {
+    border:0;
+    border-top:1px solid #555;
+    margin:0;
+    height:1px;
+}
+
+input:focus, input:focus-visible, textarea:focus {
+    outline: 0 none;
 }

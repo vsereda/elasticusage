@@ -15,10 +15,11 @@ p.results-title span {
 }
 
 .article-wrapper article {
-    border: 1px solid black;
+    border: 2px solid black;
     margin-bottom: 10px;
     padding: 10px 15px 25px 10px;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 .article-wrapper article:hover {
@@ -250,7 +251,7 @@ nav.main-router-wrapper a:first-child {
 }
 
 .article-search-wrapper .search-field-error {
-    border: 2px solid red;
+    border-color: red;
 }
 .article-search-wrapper p.search-valid-error {
     color: red;
@@ -260,6 +261,19 @@ nav.main-router-wrapper a:first-child {
 
 .search-articles-form {
     margin: 20px 0 0 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.search-articles-form input {
+    margin-right: 7px;
+    width: 100%;
+    max-width: 300px;
+}
+
+.search-articles-form input, .search-articles-form button {
+    border-radius: 3px;
+    border: 1px solid black;
 }
 
 .editor-form-group {
