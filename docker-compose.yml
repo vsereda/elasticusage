@@ -11,6 +11,8 @@ services:
       dockerfile: ../docker-compose/Dockerfile
     image: elasticusage-app
     container_name: elasticusage-app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 #    restart: unless-stopped
     working_dir: /var/www/
     volumes:

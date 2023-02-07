@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use ElasticScoutDriverPlus\Searchable;
-use App\Models\QueryBuilders\ArticlaFormQueryBuilder;
+use App\Models\QueryBuilders\ArticleFormQueryBuilder;
 use ElasticScoutDriverPlus\Builders\SearchRequestBuilder;
 class Article extends Model
 {
@@ -26,6 +26,6 @@ class Article extends Model
 
     public static function searchForm(string $input): SearchRequestBuilder
     {
-        return new SearchRequestBuilder(new ArticlaFormQueryBuilder($input), new static());
+        return new SearchRequestBuilder(new ArticleFormQueryBuilder($input), new static());
     }
 }

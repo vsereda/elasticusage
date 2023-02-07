@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TestController1;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\TestController;
@@ -15,14 +16,4 @@ use \App\Http\Controllers\TestController;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
-});
-
-Route::controller(TestController::class)->group(function () {
-    Route::get('/test', 'test');
-});
-
-Route::controller(TestController1::class)->group(function () {
-    Route::get('/test1', 'test');
-});
+Route::get('{any?}', [HomeController::class, 'index'])->where('any', '.*');
