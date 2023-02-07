@@ -2,120 +2,51 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\Article\SearchResultFormatter as SearchResultFormatterContract;
+use App\Contracts\Article\SearchEngine as SearchContract;
 use App\Http\Requests\Article\SearchRequest;
+use App\Http\Requests\Article\StoreRequest;
+use App\Http\Requests\Article\UpdateRequest;
 use App\Models\Article;
-use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
+        return Article::orderBy('id', 'desc')->select('id', 'title', 'body')->paginate(5);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(StoreRequest $request)
     {
-        //
+        $article = Article::create(['title' => $request->title, 'body' => $request->body,]);
+
+        $success = $article instanceof Article;
+        $articleId = $success ? $article->id : 0;
+
+        return ['success' => $success, 'article_id' => $articleId];
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
-     */
     public function show(Article $article)
     {
-        //
+        return $article->only(['id', 'title', 'body']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Article $article)
+    public function update(UpdateRequest $request, Article $article)
     {
-        //
+        return ['success' => $article->update($request->only('title', 'body'))];
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Article $article)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Article  $article
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Article $article)
     {
-        //
+        return ['success' => $article->delete()];
     }
 
-    public function search(SearchRequest $request)
+    public function search(SearchRequest $request, SearchContract $searchEngine, SearchResultFormatterContract $formatter)
     {
-        $searchStr = $request->search_string;
+        $searchStr = $request->input('search_string');
+        $searchResult = $searchEngine($searchStr);
+        $articles = $formatter($searchResult);
 
-        $articles = Article::searchForm($searchStr)
-            ->sort('_score', 'desc')
-            ->from(0)
-            ->size(10)
-            ->highlight('title')
-            ->highlight('body')
-            ->trackScores(true)
-            ->execute();
-        $articles_result = ($articles->hits()->map(function ($item, $key) {
-            $content = $item->document()->content();
-
-            $titleSnippet = $item->highlight()->snippets('title')->first();
-            $bodySnippets = $item->highlight()->snippets('body')
-                ->map(function ($item) {
-                    return $item . '...</br>';
-                })->toArray();
-            $bodySnippetJoined = join('', $bodySnippets);
-
-            if ($titleSnippet) {
-                $content['title'] = $titleSnippet;
-            }
-
-            $content['body_snippets'] = $bodySnippetJoined;
-
-            $content['id'] = $item->document()->id();
-            return $content;
-        }));
-
-        return $articles_result->toArray();
+        return $articles->toArray();
     }
 }

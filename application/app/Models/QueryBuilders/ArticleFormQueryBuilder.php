@@ -4,7 +4,7 @@ namespace App\Models\QueryBuilders;
 
 use ElasticScoutDriverPlus\Builders\QueryBuilderInterface;
 
-final class ArticlaFormQueryBuilder implements QueryBuilderInterface
+final class ArticleFormQueryBuilder implements QueryBuilderInterface
 {
     /**
      * @var string
@@ -26,7 +26,7 @@ final class ArticlaFormQueryBuilder implements QueryBuilderInterface
     {
         return [
             'multi_match' => [
-                'fields' => ["title^3", "body"],
+                'fields' => ["title^1.5", "body"],
                 'query' => $this->input,
                 'fuzziness' => 'AUTO',
             ]

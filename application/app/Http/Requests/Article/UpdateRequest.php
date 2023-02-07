@@ -4,7 +4,7 @@ namespace App\Http\Requests\Article;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SearchRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,9 @@ class SearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'search_string' => 'required|string|min:3|max:100',
+            'id' => 'required|exists:articles,id',
+            'title' => 'required|string|min:3|max:255',
+            'body' => 'required|string|min:3|max:2000',
         ];
     }
 }
