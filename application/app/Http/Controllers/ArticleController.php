@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\Article\SearchResultFormatter as SearchResultFormatterContract;
+use App\Contracts\Article\SearchEngine as SearchContract;
 use App\Http\Requests\Article\SearchRequest;
 use App\Http\Requests\Article\StoreRequest;
 use App\Http\Requests\Article\UpdateRequest;
 use App\Models\Article;
-use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
@@ -17,7 +18,7 @@ class ArticleController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $article = Article::create(['title' => $request->title, 'body' => $request->body, ]);
+        $article = Article::create(['title' => $request->title, 'body' => $request->body,]);
 
         $success = $article instanceof Article;
         $articleId = $success ? $article->id : 0;
@@ -40,38 +41,12 @@ class ArticleController extends Controller
         return ['success' => $article->delete()];
     }
 
-    public function search(SearchRequest $request)
+    public function search(SearchRequest $request, SearchContract $searchEngine, SearchResultFormatterContract $formatter)
     {
-        $searchStr = $request->search_string;
+        $searchStr = $request->input('search_string');
+        $searchResult = $searchEngine($searchStr);
+        $articles = $formatter($searchResult);
 
-        $articles = Article::searchForm($searchStr)
-            ->sort('_score', 'desc')
-            ->from(0)
-            ->size(10)
-            ->highlight('title')
-            ->highlight('body')
-            ->trackScores(true)
-            ->execute();
-        $articlesResult = ($articles->hits()->map(function ($item, $key) {
-            $content = $item->document()->content();
-
-            $titleSnippet = $item->highlight()->snippets('title')->first();
-            $bodySnippets = $item->highlight()->snippets('body')
-                ->map(function ($item) {
-                    return $item . '...</br>';
-                })->toArray();
-            $bodySnippetJoined = join('', $bodySnippets);
-
-            if ($titleSnippet) {
-                $content['title'] = $titleSnippet;
-            }
-
-            $content['body_snippets'] = $bodySnippetJoined;
-
-            $content['id'] = $item->document()->id();
-            return $content;
-        }));
-
-        return $articlesResult->toArray();
+        return $articles->toArray();
     }
 }
