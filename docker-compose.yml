@@ -69,8 +69,22 @@ services:
         hard: -1
     ports:
       - 9200:9200
+      - 9300:9300
     volumes:
       - es_01_data:/usr/share/elasticsearch/data
+    networks:
+      - elasticusage_network
+
+#Kibana
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.10.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://es:9200
+    ports:
+      - 5601:5601
+    depends_on:
+      - es
     networks:
       - elasticusage_network
 
