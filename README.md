@@ -1,6 +1,6 @@
 ## Introduction
 
-This is my pet-project implementing basic Elasticsearch usage, using [babenkoivan/elastic-scout-driver-plus](https://github.com/babenkoivan/elastic-scout-driver-plus) package and CRUD SPA on vue-js.
+This is my pet-project implementing basic Elasticsearch usage, using [babenkoivan/elastic-scout-driver-plus](https://github.com/babenkoivan/elastic-scout-driver-plus) package and CRUD SPA on vue-js. The search works on two fields of the article at once: title and body. Implemented correction of typos in the query and highlighting of the searched words in the search results.
 
 ## Requirements
 
@@ -54,33 +54,12 @@ docker exec -it elasticusage-app bash
 Next commands you will use in app container:
 
 ```bash
-composer install
-```
-
-```bash
-php artisan key:generate
-```
-
-```bash
-php artisan migrate
-```
-
-```bash
-php artisan elastic:migrate
-```
-
-```bash
-php artisan db:seed
-```
-
-```bash
-php artisan scout:import "App\Models\Article"
-```
-
-```bash
-npm install
-```
-
-```bash
+composer install && 
+php artisan key:generate && 
+php artisan migrate && 
+php artisan elastic:migrate && 
+php artisan db:seed && 
+php artisan scout:import "App\Models\Article" && 
+npm install && 
 npm run dev
 ```
