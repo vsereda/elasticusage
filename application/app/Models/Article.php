@@ -16,6 +16,10 @@ class Article extends Model
         'body',
     ];
 
+    public function searchableAs(): string
+    {
+        return 'articles_alias';
+    }
     public function toSearchableArray(): array
     {
         return [
