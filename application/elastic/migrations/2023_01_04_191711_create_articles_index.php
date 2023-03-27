@@ -84,6 +84,7 @@ final class CreateArticlesIndex implements MigrationInterface
                     'synonym_filter' => [
                         'type' => 'synonym',
                         'synonyms_path' => 'synonyms.txt',
+                        'updateable' => true
                     ],
                 ]
             ],
