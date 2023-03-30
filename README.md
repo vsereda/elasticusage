@@ -51,6 +51,8 @@ Enter into application container:
 docker exec -it elasticusage-app bash
 ```
 
+Update synonyms file application/elastic/synonyms.txt with your synonyms set
+
 Next commands you will use in app container:
 
 ```bash
