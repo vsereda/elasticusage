@@ -72,6 +72,7 @@ services:
       - 9300:9300
     volumes:
       - es_01_data:/usr/share/elasticsearch/data
+      - ./application/elastic/synonyms.txt:/usr/share/elasticsearch/config/synonyms.txt
     networks:
       - elasticusage_network
 

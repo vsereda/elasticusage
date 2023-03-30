@@ -13,10 +13,84 @@ final class CreateArticlesIndex implements MigrationInterface
      */
     public function up(): void
     {
-        Index::create('articles', function (Mapping $mapping, Settings $settings) {
-            $mapping->text('title');
-            $mapping->text('body');
-        });
+        $mapping = [
+            'properties' => [
+                'title' => [
+                    'type' => 'text',
+                    'analyzer' => 'title_analyzer',
+                    'search_analyzer' => 'title_search_analyzer',
+                ],
+                'body' => [
+                    'type' => 'text',
+                    'analyzer' => 'body_analyzer',
+                    'search_analyzer' => 'body_search_analyzer',
+                ],
+            ]
+        ];
+
+        $settings = [
+            'analysis' => [
+                'analyzer' => [
+                    'title_analyzer' => [
+                        'type' => 'custom',
+                        'char_filter' => [
+                            'html_strip'
+                        ],
+                        'tokenizer' => 'standard',
+                        'filter' => [
+                            "lowercase",
+                        ]
+                    ],
+                    'title_search_analyzer' => [
+                        'type' => 'custom',
+                        'char_filter' => [
+                            'html_strip'
+                        ],
+                        'tokenizer' => 'standard',
+                        'filter' => [
+                            "lowercase",
+                            "synonym_filter",
+                            "english_stop"
+                        ]
+                    ],
+                    'body_analyzer' => [
+                        'type' => 'custom',
+                        'char_filter' => [
+                            'html_strip'
+                        ],
+                        'tokenizer' => 'standard',
+                        'filter' => [
+                            "lowercase",
+                        ]
+                    ],
+                    'body_search_analyzer' => [
+                        'type' => 'custom',
+                        'char_filter' => [
+                            'html_strip'
+                        ],
+                        'tokenizer' => 'standard',
+                        'filter' => [
+                            "lowercase",
+                            "synonym_filter",
+                            "english_stop"
+                        ]
+                    ],
+                ],
+                'filter' => [
+                    "english_stop" => [
+                        'type' => 'stop',
+                        'stopwords' => '_english_'
+                    ],
+                    'synonym_filter' => [
+                        'type' => 'synonym',
+                        'synonyms_path' => 'synonyms.txt',
+                        'updateable' => true
+                    ],
+                ]
+            ],
+        ];
+
+        Index::createRaw('articles', $mapping, $settings);
     }
 
     /**

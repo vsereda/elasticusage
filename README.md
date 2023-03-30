@@ -1,6 +1,6 @@
 ## Introduction
 
-This is my pet-project implementing basic Elasticsearch usage, using [babenkoivan/elastic-scout-driver-plus](https://github.com/babenkoivan/elastic-scout-driver-plus) package and CRUD SPA on vue-js. The search works on two fields of the article at once: title and body. Implemented correction of typos in the query and highlighting of the searched words in the search results.
+This is my pet-project implementing basic Elasticsearch usage, using [babenkoivan/elastic-scout-driver-plus](https://github.com/babenkoivan/elastic-scout-driver-plus) package and CRUD SPA on vue-js. The search works on two fields of the article at once: title and body. Implemented correction of typos in the query, synonyms and highlighting of the searched words in the search results.
 
 ## Requirements
 
@@ -50,6 +50,8 @@ Enter into application container:
 ```bash
 docker exec -it elasticusage-app bash
 ```
+
+Update synonyms file application/elastic/synonyms.txt with your synonyms set
 
 Next commands you will use in app container:
 

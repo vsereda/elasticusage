@@ -1,0 +1,2 @@
+universe, cosmos
+lift, elevator
