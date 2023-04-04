@@ -6,7 +6,7 @@
             v-on:popup-closed="updatePopupClosed"
         ></update-article>
         <template v-else>
-            <h1>Search an articles</h1>
+            <h1>Article search</h1>
             <form v-on:submit.prevent="loadSearchResults" class="search-articles-form">
                 <input
                     type="text"
