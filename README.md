@@ -65,3 +65,9 @@ php artisan scout:import "App\Models\Article" &&
 npm install && 
 npm run dev
 ```
+
+You can update your synonyms file and then run:
+
+```bash
+php artisan reload-search-analyzers articles
+```
