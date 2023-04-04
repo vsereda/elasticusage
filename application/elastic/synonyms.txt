@@ -1,2 +1,6 @@
 universe, cosmos
-lift, elevator
+# lift, elevator
+gas, gasoline, fuel
+contagion, transmission, foulness => infection
+lol, laughing out loud
+i pod, ipod, i-pod
