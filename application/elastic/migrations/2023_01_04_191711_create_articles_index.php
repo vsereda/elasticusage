@@ -36,9 +36,10 @@ final class CreateArticlesIndex implements MigrationInterface
                         'char_filter' => [
                             'html_strip'
                         ],
-                        'tokenizer' => 'standard',
+                        'tokenizer' => 'whitespace',
                         'filter' => [
                             "lowercase",
+                            "english_stop",
                         ]
                     ],
                     'title_search_analyzer' => [
@@ -46,11 +47,11 @@ final class CreateArticlesIndex implements MigrationInterface
                         'char_filter' => [
                             'html_strip'
                         ],
-                        'tokenizer' => 'standard',
+                        'tokenizer' => 'whitespace',
                         'filter' => [
                             "lowercase",
+                            "english_stop",
                             "synonym_filter",
-                            "english_stop"
                         ]
                     ],
                     'body_analyzer' => [
@@ -58,9 +59,10 @@ final class CreateArticlesIndex implements MigrationInterface
                         'char_filter' => [
                             'html_strip'
                         ],
-                        'tokenizer' => 'standard',
+                        'tokenizer' => 'whitespace',
                         'filter' => [
                             "lowercase",
+                            "english_stop",
                         ]
                     ],
                     'body_search_analyzer' => [
@@ -68,11 +70,11 @@ final class CreateArticlesIndex implements MigrationInterface
                         'char_filter' => [
                             'html_strip'
                         ],
-                        'tokenizer' => 'standard',
+                        'tokenizer' => 'whitespace',
                         'filter' => [
                             "lowercase",
+                            "english_stop",
                             "synonym_filter",
-                            "english_stop"
                         ]
                     ],
                 ],
@@ -82,7 +84,7 @@ final class CreateArticlesIndex implements MigrationInterface
                         'stopwords' => '_english_'
                     ],
                     'synonym_filter' => [
-                        'type' => 'synonym',
+                        'type' => 'synonym_graph',
                         'synonyms_path' => 'synonyms.txt',
                         'updateable' => true
                     ],
