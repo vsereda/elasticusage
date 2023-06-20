@@ -14,7 +14,7 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        return new ArticleCollection(Article::orderBy('id', 'desc')->select('id', 'title', 'body')->paginate(5));
+        return new ArticleCollection(Article::orderBy('id', 'desc')->paginate(5));
     }
 
     public function store(StoreRequest $request)
