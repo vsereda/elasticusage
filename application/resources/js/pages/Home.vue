@@ -9,20 +9,22 @@
             v-on:no-answer="this.isDropPopupOpen = false"
             v-on:yes-answer="confirmedDrop"
         ></popup-message>
-        <update-article :article-id="articleIdForEdit" v-if="openEdit" v-on:popup-closed="updatePopupClosed"></update-article>
+        <update-article :article-id="articleIdForEdit" v-if="openEdit"
+                        v-on:popup-closed="updatePopupClosed"></update-article>
         <template v-else>
-            <h1>List of articles page {{ response?.current_page ?? 1 }}</h1>
+            <h1>List of articles page {{ meta?.current_page ?? 1 }}</h1>
             <nav class="articles-list-paginator">
-                <button @click="loadFirstArticles" :disabled="!firstPageActive || articles.length === 0">first</button>
-                <button @click="loadPreviousArticles" :disabled="!prevPageActive || articles.length === 0">previous</button>
-                <button @click="loadNextArticles" :disabled="!nextPageActive || articles.length === 0">next</button>
-                <button @click="loadLastArticles" :disabled="!nextPageActive || articles.length === 0">last</button>
+                <button @click="loadFirstArticles" :disabled="!firstPageActive">first</button>
+                <button @click="loadPreviousArticles" :disabled="!prevPageActive">previous
+                </button>
+                <button @click="loadNextArticles" :disabled="!nextPageActive">next</button>
+                <button @click="loadLastArticles" :disabled="!lastPageActive">last</button>
             </nav>
             <template v-if="!isArticleLoading">
-                <p class="results-title" v-if="articles.length === 0 && isArticlesDirty && !articleLoadingError">
+                <p class="results-title" v-if="noArticles">
                     There are no articles
                 </p>
-                <p class="results-title" v-else-if="isArticlesDirty && articleLoadingError">
+                <p class="results-title" v-else-if="showArticleLoadingError">
                     Search results loading error
                 </p>
             </template>
@@ -65,17 +67,14 @@ export default {
             currentPageUrl: '',
             dropArticleURL: '/api/articles',
             enableDialogYN: false,
-            firstPageActive: false,
             isArticleLoading: false,
             isArticlesDirty: false,
             isDropPopupOpen: false,
-            lastPageActive: false,
             loadArticlesURL: '/api/articles',
-            nextPageActive: false,
             openEdit: false,
             popupMessage: '',
-            prevPageActive: false,
-            response: {},
+            meta: {},
+            links: {},
         }
     },
     methods: {
@@ -85,9 +84,11 @@ export default {
                 this.isArticleLoading = true
                 this.isArticlesDirty = true
                 const response = await axios.get(url)
-                this.response = response.data
-                if (this?.response?.data?.length > 0) {
-                    this.articles = this.response.data
+
+                this.links = response?.data?.links
+                this.meta = response?.data?.meta
+                if (response?.data?.data?.length > 0) {
+                    this.articles = response.data.data
                 }
             } catch (e) {
                 this.articleLoadingError = true
@@ -118,16 +119,16 @@ export default {
             this.loadArticles(this.currentPageUrl)
         },
         loadFirstArticles() {
-            this.loadArticles(this?.response?.first_page_url)
+            this.loadArticles(this?.links?.first)
         },
         loadPreviousArticles() {
-            this.loadArticles(this?.response?.prev_page_url)
+            this.loadArticles(this?.links?.prev)
         },
         loadNextArticles() {
-            this.loadArticles(this?.response?.next_page_url)
+            this.loadArticles(this?.links?.next)
         },
         loadLastArticles() {
-            this.loadArticles(this?.response?.last_page_url)
+            this.loadArticles(this?.links?.last)
         },
         openArticle(id) {
             this.articleIdForEdit = id
@@ -138,16 +139,25 @@ export default {
             this.openEdit = false
         }
     },
-    watch: {
-        response: {
-            handler(newValue, oldValue) {
-                this.firstPageActive = newValue?.current_page > 1;
-                this.prevPageActive = newValue?.prev_page_url !== null;
-                this.nextPageActive = newValue?.next_page_url !== null;
-                this.lastPageActive = newValue?.current_page < newValue?.last_page;
-            },
-            deep: true
-        }
+    computed: {
+        firstPageActive: function () {
+            return (this.firstPageActive = this.meta?.current_page > 1) && (this.articles.length !== 0);
+        },
+        prevPageActive: function () {
+            return (this.links?.prev !== null) && (this.articles.length !== 0)
+        },
+        nextPageActive: function () {
+            return (this.links?.next !== null) && (this.articles.length !== 0)
+        },
+        lastPageActive: function () {
+            return this.nextPageActive
+        },
+        noArticles: function () {
+            return (this.articles.length === 0) && !this.articleLoadingError && this.isArticlesDirty
+        },
+        showArticleLoadingError: function () {
+            return this.isArticlesDirty && this.articleLoadingError
+        },
     },
     mounted() {
         this.loadArticles()

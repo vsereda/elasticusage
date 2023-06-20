@@ -7,13 +7,14 @@ use App\Contracts\Article\SearchEngine as SearchContract;
 use App\Http\Requests\Article\SearchRequest;
 use App\Http\Requests\Article\StoreRequest;
 use App\Http\Requests\Article\UpdateRequest;
+use App\Http\Resources\ArticleCollection;
 use App\Models\Article;
 
 class ArticleController extends Controller
 {
     public function index()
     {
-        return Article::orderBy('id', 'desc')->select('id', 'title', 'body')->paginate(5);
+        return new ArticleCollection(Article::orderBy('id', 'desc')->select('id', 'title', 'body')->paginate(5));
     }
 
     public function store(StoreRequest $request)
