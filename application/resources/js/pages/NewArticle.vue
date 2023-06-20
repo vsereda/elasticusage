@@ -1,7 +1,7 @@
 <template>
     <div class="update-article-wrapper">
         <popup-message
-            :message="'Article number '.concat(this.articleId, ' successfully created!')"
+            :message="'Article number '.concat(this.newArticle?.id, ' successfully created!')"
             :h2-message="'New article'"
             :is-popup-open="isPopupUpdatedOpen"
             v-on:close-popup="popupClosed"
@@ -30,7 +30,7 @@ export default {
     data: function () {
         return {
             article: {},
-            articleId: 1,
+            newArticle: {},
             articleErrorMessage: '',
             isArticleLoading: false,
             articleLoadingError: false,
@@ -45,9 +45,9 @@ export default {
             try {
                 this.isArticleUpdating = true
                 const response = await axios.post('api/articles', articleNew)
-                console.log(response)
-                if (response.data?.success === true && response.data?.article_id > 0 ) {
-                    this.articleId = response.data.article_id
+
+                if (response.data?.article?.id > 0) {
+                    this.newArticle = response.data.article
                     this.isPopupUpdatedOpen = true
                     this.isArticleDirty = false
                     this.article = {}

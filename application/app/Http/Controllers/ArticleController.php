@@ -8,6 +8,7 @@ use App\Http\Requests\Article\SearchRequest;
 use App\Http\Requests\Article\StoreRequest;
 use App\Http\Requests\Article\UpdateRequest;
 use App\Http\Resources\ArticleCollection;
+use App\Http\Resources\ArticleResource;
 use App\Models\Article;
 
 class ArticleController extends Controller
@@ -19,12 +20,8 @@ class ArticleController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $article = Article::create(['title' => $request->title, 'body' => $request->body,]);
-
-        $success = $article instanceof Article;
-        $articleId = $success ? $article->id : 0;
-
-        return ['success' => $success, 'article_id' => $articleId];
+        $article = Article::create($request->all());
+        return new ArticleResource($article);
     }
 
     public function show(Article $article)
