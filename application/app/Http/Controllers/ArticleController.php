@@ -15,7 +15,8 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        return new ArticleCollection(Article::orderBy('id', 'desc')->paginate(5));
+        $articles = Article::orderBy('id', 'desc')->paginate(5);
+        return new ArticleCollection($articles);
     }
 
     public function store(StoreRequest $request)
@@ -38,7 +39,6 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         $article->delete();
-//        return ['success' => $article->delete()];
         return new ArticleResource($article);
     }
 
