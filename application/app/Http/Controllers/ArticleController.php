@@ -37,7 +37,9 @@ class ArticleController extends Controller
 
     public function destroy(Article $article)
     {
-        return ['success' => $article->delete()];
+        $article->delete();
+//        return ['success' => $article->delete()];
+        return new ArticleResource($article);
     }
 
     public function search(SearchRequest $request, SearchContract $searchEngine, SearchResultFormatterContract $formatter)

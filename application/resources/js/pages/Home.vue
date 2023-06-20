@@ -100,9 +100,9 @@ export default {
             this.enableDialogYN = false
             try {
                 const response = await axios.delete(this.dropArticleURL.concat('/', this.articleIdForDrop))
-                if (response?.data?.success === true) {
+                if (response?.data?.article?.id > 0) {
                     this.loadCurrentArticles()
-                    this.popupMessage = 'Article '.concat(this.articleIdForDrop, ' successfully deleted!')
+                    this.popupMessage = 'Article '.concat(response.data.article.id, ' successfully deleted!')
                 }
             } catch (e) {
                 this.popupMessage = 'Drop article error!'
