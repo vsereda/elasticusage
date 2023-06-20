@@ -79,9 +79,9 @@ export default {
                     this.isArticlesDirty = true
                     this.searchStringInTitle = ''
                     const response = await axios.post('api/articles/search', {
-                        search_string: this.searchString,
+                        search_phrase: this.searchString,
                     },)
-                    this.articles = response.data
+                    this.articles = response?.data?.articles
                 } catch (e) {
                     this.articleLoadingError = true
                 } finally {

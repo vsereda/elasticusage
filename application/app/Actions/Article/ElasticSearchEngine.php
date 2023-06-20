@@ -6,7 +6,7 @@ use App\Contracts\Article\SearchEngine as SearchContract;
 use App\Models\Article;
 use ElasticScoutDriverPlus\Decorators\SearchResult;
 
-class SearchEngineEngine implements SearchContract
+class ElasticSearchEngine implements SearchContract
 {
     public function __invoke(string $searchStr): SearchResult
     {

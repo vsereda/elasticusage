@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\Article\SearchResultFormatter as SearchResultFormatterContract;
 use App\Contracts\Article\SearchEngine as SearchContract;
 use App\Http\Requests\Article\SearchRequest;
 use App\Http\Requests\Article\StoreRequest;
 use App\Http\Requests\Article\UpdateRequest;
 use App\Http\Resources\ArticleCollection;
 use App\Http\Resources\ArticleResource;
+use App\Http\Resources\ArticleSearchCollection;
 use App\Models\Article;
 
 class ArticleController extends Controller
@@ -42,12 +42,12 @@ class ArticleController extends Controller
         return new ArticleResource($article);
     }
 
-    public function search(SearchRequest $request, SearchContract $searchEngine, SearchResultFormatterContract $formatter)
+    public function search(SearchRequest $request, SearchContract $searching)
     {
-        $searchStr = $request->input('search_string');
-        $searchResult = $searchEngine($searchStr);
-        $articles = $formatter($searchResult);
+        $searchPhrase = $request->input('search_phrase');
+        $searchResult = $searching($searchPhrase);
+        $hits = $searchResult->hits();
 
-        return $articles->toArray();
+        return new ArticleSearchCollection($hits);
     }
 }
