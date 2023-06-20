@@ -26,12 +26,13 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        return $article->only(['id', 'title', 'body']);
+        return new ArticleResource($article);
     }
 
     public function update(UpdateRequest $request, Article $article)
     {
-        return ['success' => $article->update($request->only('title', 'body'))];
+        $article->update($request->all());
+        return new ArticleResource($article);
     }
 
     public function destroy(Article $article)

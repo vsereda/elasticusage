@@ -59,7 +59,7 @@ export default {
             try {
                 this.isArticleLoading = true
                 const response = await axios.get('api/articles/'.concat(this.articleId))
-                this.article = response.data
+                this.article = response.data?.article
                 this.isArticleDirty = false
             } catch (e) {
                 this.articleErrorMessage = 'Article load error'
@@ -72,7 +72,7 @@ export default {
             try {
                 this.isArticleUpdating = true
                 const response = await axios.put('api/articles/'.concat(this.articleId), articleNewVersion)
-                if (response.data?.success === true) {
+                if (response.data?.article?.id > 0) {
                     this.isPopupUpdatedOpen = true
                     this.isArticleDirty = false
                 }
