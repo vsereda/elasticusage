@@ -13,6 +13,8 @@
                         v-on:popup-closed="updatePopupClosed"></update-article>
         <template v-else>
             <h1>List of articles page {{ meta?.current_page ?? 1 }}</h1>
+            <h2>counter: {{ getCounter }}</h2>
+            <button @click="increment(12)">Increment</button>
             <nav class="articles-list-paginator">
                 <button @click="loadFirstArticles" :disabled="!firstPageActive">first</button>
                 <button @click="loadPreviousArticles" :disabled="!prevPageActive">previous
@@ -54,6 +56,7 @@
 
 import UpdateArticle from "./UpdateArticle.vue";
 import PopupMessage from "../components/PopupMessage.vue";
+import {mapGetters, mapActions} from 'vuex';
 
 export default {
     name: "Home",
@@ -137,7 +140,8 @@ export default {
         updatePopupClosed() {
             this.loadCurrentArticles()
             this.openEdit = false
-        }
+        },
+        ...mapActions('counterMod', ['increment']),
     },
     computed: {
         firstPageActive: function () {
@@ -158,6 +162,7 @@ export default {
         showArticleLoadingError: function () {
             return this.isArticlesDirty && this.articleLoadingError
         },
+        ...mapGetters('counterMod', ['getCounter'])
     },
     mounted() {
         this.loadArticles()

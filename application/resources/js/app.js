@@ -6,11 +6,11 @@
 
 require('./bootstrap');
 
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import ArticleSearch from './pages/ArticleSearch.vue'
 import PopupMessage from "./components/PopupMessage.vue";
-
 import router from "./router";
+import store from './store/index'
 
 /**
  * The following block of code may be used to automatically register your
@@ -31,6 +31,7 @@ import router from "./router";
 
 const app = createApp({})
 app.use(router)
+app.use(store)
 app.component('article-search', ArticleSearch)
 app.component('popup-message', PopupMessage)
 app.mount('#app')
