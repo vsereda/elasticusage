@@ -7,14 +7,12 @@
             :enable-dialog-y-n="enableDialogYN"
             v-on:close-popup="this.isDropPopupOpen = false"
             v-on:no-answer="this.isDropPopupOpen = false"
-            v-on:yes-answer="confirmedDrop"
+            v-on:yes-answer="dropArticle"
         ></popup-message>
         <update-article :article-id="articleIdForEdit" v-if="openEdit"
                         v-on:popup-closed="updatePopupClosed"></update-article>
         <template v-else>
-            <h1>List of articles page {{ meta?.current_page ?? 1 }}</h1>
-            <h2>counter: {{ getCounter }}</h2>
-            <button @click="increment(12)">Increment</button>
+            <h1>List of articles page {{ getMeta?.current_page ?? 1 }}</h1>
             <nav class="articles-list-paginator">
                 <button @click="loadFirstArticles" :disabled="!firstPageActive">first</button>
                 <button @click="loadPreviousArticles" :disabled="!prevPageActive">previous
@@ -22,7 +20,7 @@
                 <button @click="loadNextArticles" :disabled="!nextPageActive">next</button>
                 <button @click="loadLastArticles" :disabled="!lastPageActive">last</button>
             </nav>
-            <template v-if="!isArticleLoading">
+            <template v-if="!getIsArticleLoading">
                 <p class="results-title" v-if="noArticles">
                     There are no articles
                 </p>
@@ -32,7 +30,7 @@
             </template>
 
             <div class="article-wrapper">
-                <article v-for="item in articles" key="item.id" @click="openArticle(item.id)">
+                <article v-for="item in getArticles" key="item.id" @click="openArticle(item.id)">
                     <div class="article-top">
                         <h2 class="article-name" v-html="''.concat(item.id, '. ', item.title)"></h2>
                         <div class="drop-button-wrapper" v-show="!isDropPopupOpen">
@@ -56,7 +54,7 @@
 
 import UpdateArticle from "./UpdateArticle.vue";
 import PopupMessage from "../components/PopupMessage.vue";
-import {mapGetters, mapActions} from 'vuex';
+import {mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {
     name: "Home",
@@ -65,41 +63,16 @@ export default {
         return {
             articleIdForEdit: 1,
             articleIdForDrop: 1,
-            articleLoadingError: false,
-            articles: [],
-            currentPageUrl: '',
             dropArticleURL: '/api/articles',
             enableDialogYN: false,
-            isArticleLoading: false,
-            isArticlesDirty: false,
             isDropPopupOpen: false,
             loadArticlesURL: '/api/articles',
             openEdit: false,
             popupMessage: '',
-            meta: {},
-            links: {},
         }
     },
     methods: {
-        async loadArticles(url = this.loadArticlesURL) {
-            this.currentPageUrl = url
-            try {
-                this.isArticleLoading = true
-                this.isArticlesDirty = true
-                const response = await axios.get(url)
-
-                this.links = response?.data?.links
-                this.meta = response?.data?.meta
-                if (response?.data?.data?.length > 0) {
-                    this.articles = response.data.data
-                }
-            } catch (e) {
-                this.articleLoadingError = true
-            } finally {
-                this.isArticleLoading = false
-            }
-        },
-        async confirmedDrop() {
+        async dropArticle() {
             this.enableDialogYN = false
             try {
                 const response = await axios.delete(this.dropArticleURL.concat('/', this.articleIdForDrop))
@@ -118,21 +91,6 @@ export default {
             this.enableDialogYN = true
             this.isDropPopupOpen = true
         },
-        loadCurrentArticles() {
-            this.loadArticles(this.currentPageUrl)
-        },
-        loadFirstArticles() {
-            this.loadArticles(this?.links?.first)
-        },
-        loadPreviousArticles() {
-            this.loadArticles(this?.links?.prev)
-        },
-        loadNextArticles() {
-            this.loadArticles(this?.links?.next)
-        },
-        loadLastArticles() {
-            this.loadArticles(this?.links?.last)
-        },
         openArticle(id) {
             this.articleIdForEdit = id
             this.openEdit = true
@@ -141,31 +99,16 @@ export default {
             this.loadCurrentArticles()
             this.openEdit = false
         },
-        ...mapActions('counterMod', ['increment']),
+        ...mapMutations('homeArticlesModule', ['setArticles', 'setArticleLoadingError', 'setMeta', 'setLinks', 'setIsArticlesDirty', 'setIsArticleLoading']),
+        ...mapActions('homeArticlesModule', ['loadArticles', 'loadLastArticles', 'loadNextArticles', 'loadPreviousArticles', 'loadFirstArticles', 'loadCurrentArticles'])
     },
     computed: {
-        firstPageActive: function () {
-            return (this.firstPageActive = this.meta?.current_page > 1) && (this.articles.length !== 0);
-        },
-        prevPageActive: function () {
-            return (this.links?.prev !== null) && (this.articles.length !== 0)
-        },
-        nextPageActive: function () {
-            return (this.links?.next !== null) && (this.articles.length !== 0)
-        },
-        lastPageActive: function () {
-            return this.nextPageActive
-        },
-        noArticles: function () {
-            return (this.articles.length === 0) && !this.articleLoadingError && this.isArticlesDirty
-        },
-        showArticleLoadingError: function () {
-            return this.isArticlesDirty && this.articleLoadingError
-        },
-        ...mapGetters('counterMod', ['getCounter'])
+        ...mapGetters('homeArticlesModule', ['getArticles', 'getArticlesLoadingError', 'getMeta', 'firstPageActive',
+            'getLinks', 'getIsArticlesDirty', 'prevPageActive', 'nextPageActive', 'lastPageActive', 'noArticles', 'getIsArticleLoading',
+            'showArticleLoadingError'])
     },
     mounted() {
-        this.loadArticles()
+        this.loadArticles(this.loadArticlesURL)
     }
 }
 </script>

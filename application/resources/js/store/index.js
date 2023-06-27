@@ -1,9 +1,9 @@
 import {createStore} from 'vuex';
-import counterModule from './counter/index';
+import articlesModule from './home/articles';
 
 const store = createStore({
     modules: {
-        counterMod: counterModule,
+        homeArticlesModule: articlesModule,
     }
 })
 

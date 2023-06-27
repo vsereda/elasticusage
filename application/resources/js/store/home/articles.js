@@ -2,22 +2,112 @@ const articlesModule = {
     namespaced: true,
     state() {
         return {
-            counter: 0
+            articles: [],
+            meta: {},
+            links: {},
+            articleLoadingError: false,
+            isArticlesDirty: false,
+            isArticleLoading: false,
+            currentPageUrl: '',
         }
     },
     getters: {
-        // getCounter(state) {
-        //     return state.counter
-        // },
+        getArticles(state) {
+            return state.articles
+        },
+        getArticlesLoadingError(state) {
+            return state.articleLoadingError
+        },
+        getMeta(state) {
+            return state.meta
+        },
+        getLinks(state) {
+            return state.links
+        },
+        getIsArticlesDirty(state) {
+            return state.isArticlesDirty
+        },
+        getIsArticleLoading(state) {
+            return state.isArticleLoading
+        },
+        firstPageActive(state) {
+            return (state.meta?.current_page > 1) && (state.articles.length !== 0);
+        },
+        prevPageActive(state) {
+            return (state.links?.prev !== null) && (state.articles.length !== 0)
+        },
+        nextPageActive(state) {
+            return (state.links?.next !== null) && (state.articles.length !== 0)
+        },
+        lastPageActive(state) {
+            return (state.links?.next !== null) && (state.articles.length !== 0)
+        },
+        noArticles(state) {
+            return (state.articles.length === 0) && !state.articleLoadingError && state.isArticlesDirty
+        },
+        showArticleLoadingError(state) {
+            return state.isArticlesDirty && state.articleLoadingError
+        },
+        getCurrentPageUrl(state) {
+            return state.currentPageUrl
+        },
     },
     mutations: {
-        // increment(state, payload) {
-        //     state.counter = state.counter + payload
-        // }
+        setArticles(state, payload) {
+            state.articles = payload
+        },
+        setArticleLoadingError(state, payload) {
+            state.articleLoadingError = payload
+        },
+        setMeta(state, payload) {
+            state.meta = payload
+        },
+        setLinks(state, payload) {
+            state.links = payload
+        },
+        setIsArticlesDirty(state, payload) {
+            state.isArticlesDirty = payload
+        },
+        setIsArticleLoading(state, payload) {
+            state.isArticleLoading = payload
+        },
+        setCurrentPageUrl(state, payload) {
+            state.currentPageUrl = payload
+        },
     },
     actions: {
-        // increment(context, payload) {
-        //     context.commit('increment', payload)
-        // }
+        loadArticles(context, url) {
+            context.commit('setCurrentPageUrl', url)
+            context.commit('setIsArticleLoading', true)
+            context.commit('setIsArticlesDirty', true)
+
+            axios.get(url).then((response) => {
+                context.commit('setLinks', response?.data?.links)
+                context.commit('setMeta', response?.data?.meta)
+                if (response?.data?.data?.length > 0) {
+                    context.commit('setArticles', response.data.data)
+                }
+            }).catch(() => {
+                context.commit('setArticleLoadingError', true)
+            });
+            context.commit('setIsArticleLoading', false)
+        },
+        loadCurrentArticles(context) {
+            context.dispatch('loadArticles', context.getters.getCurrentPageUrl)
+        },
+        loadFirstArticles(context) {
+            context.dispatch('loadArticles', context.getters.getLinks?.first)
+        },
+        loadPreviousArticles(context) {
+            context.dispatch('loadArticles', context.getters.getLinks?.prev)
+        },
+        loadNextArticles(context) {
+            context.dispatch('loadArticles', context.getters.getLinks?.next)
+        },
+        loadLastArticles(context) {
+            context.dispatch('loadArticles', context.getters.getLinks?.last)
+        },
     },
 }
+
+export default articlesModule
