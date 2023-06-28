@@ -1,19 +1,19 @@
 <template>
     <div class="update-article-wrapper">
         <article-popup
-            :message="'Article number '.concat(this.newArticle?.id, ' successfully created!')"
+            :message="'Article number '.concat(getNewArticle?.id, ' successfully created!')"
             :h2-message="'New article'"
-            :is-popup-open="isPopupUpdatedOpen"
+            :is-popup-open="getIsPopupUpdatedOpen"
             v-on:close-popup="popupClosed"
         ></article-popup>
         <h1>New article</h1>
         <article-editor
-            :article="article"
-            :article-error="articleUpdateError || articleLoadingError"
-            :article-error-message="articleErrorMessage"
-            :is-article-dirty="isArticleDirty"
-            :is-article-updating="isArticleUpdating"
-            v-on:set-article-dirty="setArticleDirty"
+            :article="getArticle"
+            :article-error="getArticleUpdateError"
+            :article-error-message="getArticleErrorMessage"
+            :is-article-dirty="getIsArticleDirty"
+            :is-article-updating="getIsArticleUpdating"
+            v-on:set-article-dirty="setIsArticleDirty"
             v-on:update-article="storeArticle"
         ></article-editor>
     </div>
@@ -23,58 +23,39 @@
 
 import PopupMessage from "../components/ArticlePopup.vue";
 import ArticleEditor from "../components/ArticleEditor.vue";
+import {mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {
     name: "NewArticle",
     components: {ArticleEditor, PopupMessage},
     data: function () {
         return {
-            article: {},
-            newArticle: {},
-            articleErrorMessage: '',
-            isArticleLoading: false,
-            articleLoadingError: false,
-            isArticleDirty: false,
-            isArticleUpdating: false,
-            articleUpdateError: false,
-            isPopupUpdatedOpen: false,
         }
     },
     methods: {
-        async storeArticle(articleNew) {
-            try {
-                this.isArticleUpdating = true
-                const response = await axios.post('api/articles', articleNew)
-
-                if (response.data?.article?.id > 0) {
-                    this.newArticle = response.data.article
-                    this.isPopupUpdatedOpen = true
-                    this.isArticleDirty = false
-                    this.article = {}
-                }
-                this.articleUpdateError = false
-            } catch (e) {
-                this.articleErrorMessage = 'Article create error'
-                this.articleUpdateError = true
-            } finally {
-                this.isArticleUpdating = false
-            }
-        },
         onSubmit() {
-            if (this.isArticleDirty) {
+            if (this.getIsArticleDirty) {
                 this.storeArticle()
             }
         },
         popupClosed() {
-            this.isPopupUpdatedOpen = false
-            this.$emit('popup-closed')
+            this.setIsPopupUpdatedOpen(false)
         },
-        setArticleDirty(isDirty) {
-            this.isArticleDirty = isDirty
-        }
+        ...mapActions('newArticleModule', ['storeArticle']),
+        ...mapMutations('newArticleModule', ['setIsArticleDirty', 'setIsPopupUpdatedOpen'])
     },
-    mounted() {
-    }
+    computed: {
+        ...mapGetters(
+            'newArticleModule', [
+                'getNewArticle',
+                'getIsPopupUpdatedOpen',
+                'getArticle',
+                'getArticleUpdateError',
+                'getArticleErrorMessage',
+                'getIsArticleUpdating',
+                'getIsArticleDirty',
+            ])
+    },
 }
 </script>
 
