@@ -1,13 +1,13 @@
 <template>
     <div>
         <article-popup
-            :message="popupMessage"
+            :message="getPopupMessage"
             :h2-message="'Dropping an article'"
             :is-popup-open="isDropPopupOpen"
             :enable-dialog-y-n="enableDialogYN"
             v-on:close-popup="this.isDropPopupOpen = false"
             v-on:no-answer="this.isDropPopupOpen = false"
-            v-on:yes-answer="dropArticle"
+            v-on:yes-answer="onDropConfirmed(this.dropArticleURL.concat('/', this.articleIdForDrop))"
         ></article-popup>
         <update-article :article-id="articleIdForEdit" v-if="openEdit"
                         v-on:popup-closed="updatePopupClosed"></update-article>
@@ -52,26 +52,16 @@ export default {
             isDropPopupOpen: false,
             loadArticlesURL: '/api/articles',
             openEdit: false,
-            popupMessage: '',
         }
     },
     methods: {
-        async dropArticle() {
+        onDropConfirmed() {
             this.enableDialogYN = false
-            try {
-                const response = await axios.delete(this.dropArticleURL.concat('/', this.articleIdForDrop))
-                if (response?.data?.article?.id > 0) {
-                    this.loadCurrentArticles()
-                    this.popupMessage = 'Article '.concat(response.data.article.id, ' successfully deleted!')
-                }
-            } catch (e) {
-                this.popupMessage = 'Drop article error!'
-            } finally {
-            }
+            this.dropArticle(this.dropArticleURL.concat('/', this.articleIdForDrop))
         },
         onClickDrop(id) {
             this.articleIdForDrop = id
-            this.popupMessage = 'Do you really want to drop article '.concat(id, '?')
+            this.setPopupMessage('Do you really want to drop article '.concat(id, '?'))
             this.enableDialogYN = true
             this.isDropPopupOpen = true
         },
@@ -83,13 +73,29 @@ export default {
             this.loadCurrentArticles()
             this.openEdit = false
         },
-        ...mapMutations('homeArticlesModule', ['setArticles', 'setArticleLoadingError', 'setMeta', 'setLinks', 'setIsArticlesDirty', 'setIsArticleLoading']),
-        ...mapActions('homeArticlesModule', ['loadArticles', 'loadLastArticles', 'loadNextArticles', 'loadPreviousArticles', 'loadFirstArticles', 'loadCurrentArticles'])
+        ...mapMutations('homeArticlesModule', ['setPopupMessage']),
+        ...mapActions('homeArticlesModule', [
+            'loadArticles',
+            'loadLastArticles',
+            'loadNextArticles',
+            'loadPreviousArticles',
+            'loadFirstArticles',
+            'loadCurrentArticles',
+            'dropArticle'
+        ])
     },
     computed: {
-        ...mapGetters('homeArticlesModule', ['getArticles', 'getArticlesLoadingError', 'getMeta', 'firstPageActive',
-            'getLinks', 'getIsArticlesDirty', 'prevPageActive', 'nextPageActive', 'lastPageActive', 'noArticles', 'getIsArticleLoading',
-            'showArticleLoadingError'])
+        ...mapGetters('homeArticlesModule', [
+            'getMeta',
+            'firstPageActive',
+            'prevPageActive',
+            'nextPageActive',
+            'lastPageActive',
+            'noArticles',
+            'getIsArticleLoading',
+            'showArticleLoadingError',
+            'getPopupMessage'
+        ])
     },
     mounted() {
         this.loadArticles(this.loadArticlesURL)
