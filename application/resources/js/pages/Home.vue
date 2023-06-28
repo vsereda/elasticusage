@@ -2,15 +2,15 @@
     <div>
         <article-popup
             :message="getPopupMessage"
-            :h2-message="'Dropping an article'"
+            :h2-message="'Deleting an article'"
             :is-popup-open="isDropPopupOpen"
-            :enable-dialog-y-n="enableDialogYN"
+            :enable-dialog-y-n="useDialogYesNo"
             v-on:close-popup="this.isDropPopupOpen = false"
             v-on:no-answer="this.isDropPopupOpen = false"
-            v-on:yes-answer="onDropConfirmed(this.dropArticleURL.concat('/', this.articleIdForDrop))"
+            v-on:yes-answer="onDropConfirmed"
         ></article-popup>
-        <update-article :article-id="articleIdForEdit" v-if="openEdit"
-                        v-on:popup-closed="updatePopupClosed"></update-article>
+        <update-article :article-id="articleIdForEdit" v-if="openEdit" v-on:popup-closed="updatePopupClosed">
+        </update-article>
         <template v-else>
             <h1>List of articles page {{ getMeta?.current_page ?? 1 }}</h1>
             <nav class="articles-list-paginator">
@@ -47,22 +47,20 @@ export default {
         return {
             articleIdForEdit: 1,
             articleIdForDrop: 1,
-            dropArticleURL: '/api/articles',
-            enableDialogYN: false,
+            useDialogYesNo: false,
             isDropPopupOpen: false,
-            loadArticlesURL: '/api/articles',
             openEdit: false,
         }
     },
     methods: {
         onDropConfirmed() {
-            this.enableDialogYN = false
-            this.dropArticle(this.dropArticleURL.concat('/', this.articleIdForDrop))
+            this.useDialogYesNo = false
+            this.dropArticle(this.articleIdForDrop)
         },
         onClickDrop(id) {
             this.articleIdForDrop = id
             this.setPopupMessage('Do you really want to drop article '.concat(id, '?'))
-            this.enableDialogYN = true
+            this.useDialogYesNo = true
             this.isDropPopupOpen = true
         },
         openArticle(id) {
@@ -98,7 +96,6 @@ export default {
         ])
     },
     mounted() {
-        this.loadArticles(this.loadArticlesURL)
     }
 }
 </script>

@@ -2,6 +2,7 @@ const articlesModule = {
     namespaced: true,
     state() {
         return {
+            loadArticlesURL: '/api/articles',
             articles: [],
             meta: {},
             links: {},
@@ -10,6 +11,7 @@ const articlesModule = {
             isArticleLoading: false,
             currentPageUrl: '',
             popupMessage: '',
+            dropArticleURL: '/api/articles',
         }
     },
     getters: {
@@ -55,6 +57,12 @@ const articlesModule = {
         getPopupMessage(state) {
             return state.popupMessage
         },
+        getLoadArticlesURL(state) {
+            return state.loadArticlesURL
+        },
+        getDropArticleURL(state) {
+            return state.dropArticleURL
+        }
     },
     mutations: {
         setArticles(state, payload) {
@@ -81,11 +89,10 @@ const articlesModule = {
         setPopupMessage(state, payload) {
             state.popupMessage = payload
         },
-
     },
     actions: {
-        dropArticle(context, url) {
-            axios.delete(url).then(
+        dropArticle(context, id) {
+            axios.delete(context.getters.getDropArticleURL.concat('/', id)).then(
                 (response) => {
                     if (response?.data?.article?.id > 0) {
                         context.dispatch('loadCurrentArticles')
