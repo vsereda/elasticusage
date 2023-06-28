@@ -1,6 +1,6 @@
 <template>
     <div>
-        <popup-message
+        <article-popup
             :message="popupMessage"
             :h2-message="'Dropping an article'"
             :is-popup-open="isDropPopupOpen"
@@ -8,7 +8,7 @@
             v-on:close-popup="this.isDropPopupOpen = false"
             v-on:no-answer="this.isDropPopupOpen = false"
             v-on:yes-answer="dropArticle"
-        ></popup-message>
+        ></article-popup>
         <update-article :article-id="articleIdForEdit" v-if="openEdit"
                         v-on:popup-closed="updatePopupClosed"></update-article>
         <template v-else>
@@ -36,7 +36,7 @@
 <script>
 
 import UpdateArticle from "./UpdateArticle.vue";
-import PopupMessage from "../components/PopupMessage.vue";
+import PopupMessage from "../components/ArticlePopup.vue";
 import ArticleList from "../components/ArticleList.vue";
 import {mapGetters, mapActions, mapMutations} from 'vuex';
 

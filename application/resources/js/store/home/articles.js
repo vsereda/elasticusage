@@ -89,8 +89,9 @@ const articlesModule = {
                 }
             }).catch(() => {
                 context.commit('setArticleLoadingError', true)
+            }).finally(() => {
+                context.commit('setIsArticleLoading', false)
             });
-            context.commit('setIsArticleLoading', false)
         },
         loadCurrentArticles(context) {
             context.dispatch('loadArticles', context.getters.getCurrentPageUrl)

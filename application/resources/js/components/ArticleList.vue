@@ -20,7 +20,7 @@
 
 <script>
 
-import PopupMessage from "./PopupMessage.vue";
+import PopupMessage from "./ArticlePopup.vue";
 import UpdateArticle from "../pages/UpdateArticle.vue";
 import {mapGetters} from "vuex";
 

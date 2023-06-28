@@ -1,11 +1,11 @@
 <template>
     <div class="update-article-wrapper">
-        <popup-message
+        <article-popup
             :message="'Article '.concat(this.article?.id, ' successfully updated!')"
             :h2-message="'Updating article'"
             :is-popup-open="isPopupUpdatedOpen"
             v-on:close-popup="popupClosed"
-        ></popup-message>
+        ></article-popup>
         <h1>Update article {{ articleId }}</h1>
         <article-editor
             :article="article"
@@ -30,7 +30,7 @@
 
 <script>
 
-import PopupMessage from "../components/PopupMessage.vue";
+import PopupMessage from "../components/ArticlePopup.vue";
 import ArticleEditor from "../components/ArticleEditor.vue";
 
 export default {
