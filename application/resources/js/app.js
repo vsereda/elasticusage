@@ -29,9 +29,16 @@ import store from './store/index'
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = createApp({})
+const app = createApp({
+    created() {
+        store.dispatch('homeArticlesModule/loadArticles',
+            store.getters['homeArticlesModule/getLoadArticlesURL']
+        )
+    }
+})
 app.use(router)
 app.use(store)
 app.component('article-search', ArticleSearch)
 app.component('article-popup', ArticlePopup)
 app.mount('#app')
+
