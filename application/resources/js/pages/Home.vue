@@ -15,8 +15,7 @@
             <h1>List of articles page {{ getMeta?.current_page ?? 1 }}</h1>
             <nav class="articles-list-paginator">
                 <button @click="loadFirstArticles" :disabled="!firstPageActive">first</button>
-                <button @click="loadPreviousArticles" :disabled="!prevPageActive">previous
-                </button>
+                <button @click="loadPreviousArticles" :disabled="!prevPageActive">previous</button>
                 <button @click="loadNextArticles" :disabled="!nextPageActive">next</button>
                 <button @click="loadLastArticles" :disabled="!lastPageActive">last</button>
             </nav>
@@ -28,24 +27,8 @@
                     Search results loading error
                 </p>
             </template>
-
-            <div class="article-wrapper">
-                <article v-for="item in getArticles" key="item.id" @click="openArticle(item.id)">
-                    <div class="article-top">
-                        <h2 class="article-name" v-html="''.concat(item.id, '. ', item.title)"></h2>
-                        <div class="drop-button-wrapper" v-show="!isDropPopupOpen">
-                            <a
-                                href="#"
-                                class="drop-article"
-                                @click.prevent.stop="clickDropButton(item.id)"
-                                title="Drop this article"
-                            ></a>
-                            <span class="drop-article-title">Drop</span>
-                        </div>
-                    </div>
-                    <p class="article-body">{{ item.body }}</p>
-                </article>
-            </div>
+            <article-list @open-article="openArticle" @click-drop="onClickDrop" :is-drop-popup-open="isDropPopupOpen">
+            </article-list>
         </template>
     </div>
 </template>
@@ -54,11 +37,12 @@
 
 import UpdateArticle from "./UpdateArticle.vue";
 import PopupMessage from "../components/PopupMessage.vue";
+import ArticleList from "../components/ArticleList.vue";
 import {mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {
     name: "Home",
-    components: {PopupMessage, UpdateArticle},
+    components: {PopupMessage, UpdateArticle, ArticleList},
     data: function () {
         return {
             articleIdForEdit: 1,
@@ -85,7 +69,7 @@ export default {
             } finally {
             }
         },
-        clickDropButton(id) {
+        onClickDrop(id) {
             this.articleIdForDrop = id
             this.popupMessage = 'Do you really want to drop article '.concat(id, '?')
             this.enableDialogYN = true
