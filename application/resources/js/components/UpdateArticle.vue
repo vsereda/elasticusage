@@ -63,8 +63,6 @@ export default {
         },
         popupClosed() {
             this.isPopupUpdatedOpen = false
-
-            // this.loadCurrentArticles()
             this.$emit('popup-closed')
         },
         updateArticle(article) {
@@ -104,20 +102,8 @@ export default {
         setArticleDirty(isDirty) {
             this.isArticleDirty = isDirty
         }
-        // ...mapActions('updateArticleModule', ['loadArticle', 'updateArticle']),
-        // ...mapMutations('updateArticleModule', ['setIsPopupUpdatedOpen', 'setIsArticleDirty'])
     },
     computed: {
-        // ...mapGetters(
-        //     'updateArticleModule', [
-        //         'getArticle',
-        //         'getIsPopupUpdatedOpen',
-        //         'getArticleUpdateError',
-        //         'getArticleLoadingError',
-        //         'getArticleErrorMessage',
-        //         'getIsArticleUpdating',
-        //         'getIsArticleDirty',
-        //     ])
     },
     mounted() {
         this.loadArticle(this.articleId)
