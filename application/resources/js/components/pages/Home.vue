@@ -35,9 +35,9 @@
 
 <script>
 
-import UpdateArticle from "../components/UpdateArticle.vue";
-import PopupMessage from "../components/ArticlePopup.vue";
-import ArticleList from "../components/ArticleList.vue";
+import UpdateArticle from "../UI/UpdateArticle.vue";
+import PopupMessage from "../UI/ArticlePopup.vue";
+import ArticleList from "../UI/ArticleList.vue";
 import {mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {

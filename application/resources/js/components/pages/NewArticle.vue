@@ -21,8 +21,8 @@
 
 <script>
 
-import PopupMessage from "../components/ArticlePopup.vue";
-import ArticleEditor from "../components/ArticleEditor.vue";
+import PopupMessage from "../UI/ArticlePopup.vue";
+import ArticleEditor from "../UI/ArticleEditor.vue";
 import {mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {

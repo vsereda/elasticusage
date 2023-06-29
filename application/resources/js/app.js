@@ -7,8 +7,8 @@
 require('./bootstrap');
 
 import {createApp} from 'vue'
-import ArticleSearch from './pages/ArticleSearch.vue'
-import ArticlePopup from "./components/ArticlePopup.vue";
+import ArticleSearch from './components/pages/ArticleSearch.vue'
+import ArticlePopup from "./components/UI/ArticlePopup.vue";
 import router from "./router";
 import store from './store/index'
 

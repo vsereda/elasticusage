@@ -1,9 +1,9 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-import Home from "../pages/Home.vue";
-import NewArticle from "../pages/NewArticle.vue";
-import ArticleSearch from "../pages/ArticleSearch.vue";
-import PageNotFound from "../pages/PageNotFound.vue";
+import Home from "../components/pages/Home.vue";
+import NewArticle from "../components/pages/NewArticle.vue";
+import ArticleSearch from "../components/pages/ArticleSearch.vue";
+import PageNotFound from "../components/pages/PageNotFound.vue";
 
 const routes = [
     {
