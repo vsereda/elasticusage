@@ -4,20 +4,18 @@ namespace App\Actions\Article;
 
 use App\Contracts\Article\SearchEngine as SearchContract;
 use App\Models\Article;
-use ElasticScoutDriverPlus\Decorators\SearchResult;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ElasticSearchEngine implements SearchContract
 {
-    public function __invoke(string $searchStr): SearchResult
+    public function __invoke(string $searchStr): LengthAwarePaginator
     {
         $SearchResult = Article::searchForm($searchStr)
             ->sort('_score', 'desc')
-            ->from(0)
-            ->size(10)
             ->highlight('title')
             ->highlight('body')
             ->trackScores(true)
-            ->execute();
+            ->paginate(5);
 
         return $SearchResult;
     }

@@ -46,8 +46,6 @@ class ArticleController extends Controller
     {
         $searchPhrase = $request->input('search_phrase');
         $searchResult = $searching($searchPhrase);
-        $hits = $searchResult->hits();
-
-        return new ArticleSearchCollection($hits);
+        return new ArticleSearchCollection($searchResult);
     }
 }
