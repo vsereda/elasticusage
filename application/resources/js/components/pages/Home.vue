@@ -5,11 +5,11 @@
             :h2-message="'Deleting an article'"
             :is-popup-open="isDropPopupOpen"
             :enable-dialog-y-n="useDialogYesNo"
-            v-on:close-popup="this.isDropPopupOpen = false"
-            v-on:no-answer="this.isDropPopupOpen = false"
-            v-on:yes-answer="onDropConfirmed"
+            @close-popup="this.isDropPopupOpen = false"
+            @no-answer="this.isDropPopupOpen = false"
+            @yes-answer="onDropConfirmed"
         ></article-popup>
-        <update-article :article-id="articleIdForEdit" v-if="openEdit" v-on:popup-closed="updatePopupClosed">
+        <update-article :article-id="articleIdForEdit" v-if="openEdit" @popup-closed="updatePopupClosed">
         </update-article>
         <template v-else>
             <h1>List of articles page {{ getMeta?.current_page ?? 1 }}</h1>
@@ -18,10 +18,10 @@
                 :next-page-active="nextPageActive"
                 :prev-page-active="prevPageActive"
                 :first-page-active="firstPageActive"
-                v-on:load-first-articles="loadFirstArticles"
-                v-on:load-previous-articles="loadPreviousArticles"
-                v-on:load-next-articles="loadNextArticles"
-                v-on:load-last-articles="loadLastArticles"
+                @load-first-articles="loadFirstArticles"
+                @load-previous-articles="loadPreviousArticles"
+                @load-next-articles="loadNextArticles"
+                @load-last-articles="loadLastArticles"
             >
             </article-paginator>
             <template v-if="!getIsArticleLoading">

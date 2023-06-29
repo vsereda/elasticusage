@@ -4,7 +4,7 @@
             :message="'Article number '.concat(getNewArticle?.id, ' successfully created!')"
             :h2-message="'New article'"
             :is-popup-open="getIsPopupUpdatedOpen"
-            v-on:close-popup="popupClosed"
+            @close-popup="popupClosed"
         ></article-popup>
         <h1>New article</h1>
         <article-editor
@@ -13,8 +13,8 @@
             :article-error-message="getArticleErrorMessage"
             :is-article-dirty="getIsArticleDirty"
             :is-article-updating="getIsArticleUpdating"
-            v-on:set-article-dirty="setIsArticleDirty"
-            v-on:update-article="storeArticle"
+            @set-article-dirty="setIsArticleDirty"
+            @update-article="storeArticle"
         ></article-editor>
     </div>
 </template>
