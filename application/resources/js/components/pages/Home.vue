@@ -13,12 +13,17 @@
         </update-article>
         <template v-else>
             <h1>List of articles page {{ getMeta?.current_page ?? 1 }}</h1>
-            <nav class="articles-list-paginator">
-                <button @click="loadFirstArticles" :disabled="!firstPageActive">first</button>
-                <button @click="loadPreviousArticles" :disabled="!prevPageActive">previous</button>
-                <button @click="loadNextArticles" :disabled="!nextPageActive">next</button>
-                <button @click="loadLastArticles" :disabled="!lastPageActive">last</button>
-            </nav>
+            <article-paginator
+                :last-page-active="lastPageActive"
+                :next-page-active="nextPageActive"
+                :prev-page-active="prevPageActive"
+                :first-page-active="firstPageActive"
+                v-on:load-first-articles="loadFirstArticles"
+                v-on:load-previous-articles="loadPreviousArticles"
+                v-on:load-next-articles="loadNextArticles"
+                v-on:load-last-articles="loadLastArticles"
+            >
+            </article-paginator>
             <template v-if="!getIsArticleLoading">
                 <p class="results-title" v-if="noArticles">
                     There are no articles
@@ -39,10 +44,11 @@ import UpdateArticle from "../UI/UpdateArticle.vue";
 import PopupMessage from "../UI/ArticlePopup.vue";
 import ArticleList from "../UI/ArticleList.vue";
 import {mapGetters, mapActions, mapMutations} from 'vuex';
+import ArticlePaginator from "../UI/ArticlePaginator.vue";
 
 export default {
     name: "Home",
-    components: {PopupMessage, UpdateArticle, ArticleList},
+    components: {ArticlePaginator, PopupMessage, UpdateArticle, ArticleList},
     data: function () {
         return {
             articleIdForEdit: 1,
@@ -68,7 +74,6 @@ export default {
             this.openEdit = true
         },
         updatePopupClosed() {
-            // this.loadCurrentArticles()
             this.openEdit = false
         },
         ...mapMutations('homeArticlesModule', ['setPopupMessage']),
