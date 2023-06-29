@@ -1,4 +1,4 @@
-const articlesModule = {
+const homeArticlesModule = {
     namespaced: true,
     state() {
         return {
@@ -138,4 +138,4 @@ const articlesModule = {
     },
 }
 
-export default articlesModule
+export default homeArticlesModule

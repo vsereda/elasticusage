@@ -35,7 +35,7 @@
 
 <script>
 
-import UpdateArticle from "./UpdateArticle.vue";
+import UpdateArticle from "../components/UpdateArticle.vue";
 import PopupMessage from "../components/ArticlePopup.vue";
 import ArticleList from "../components/ArticleList.vue";
 import {mapGetters, mapActions, mapMutations} from 'vuex';
@@ -68,7 +68,7 @@ export default {
             this.openEdit = true
         },
         updatePopupClosed() {
-            this.loadCurrentArticles()
+            // this.loadCurrentArticles()
             this.openEdit = false
         },
         ...mapMutations('homeArticlesModule', ['setPopupMessage']),

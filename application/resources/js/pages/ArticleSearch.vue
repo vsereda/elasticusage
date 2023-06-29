@@ -50,7 +50,7 @@
 
 <script>
 import useValidate from '@vuelidate/core'
-import UpdateArticle from "./UpdateArticle.vue";
+import UpdateArticle from "../components/UpdateArticle.vue";
 import {required, minLength, maxLength} from '@vuelidate/validators'
 
 export default {

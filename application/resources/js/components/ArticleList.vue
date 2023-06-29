@@ -21,7 +21,7 @@
 <script>
 
 import PopupMessage from "./ArticlePopup.vue";
-import UpdateArticle from "../pages/UpdateArticle.vue";
+import UpdateArticle from "./UpdateArticle.vue";
 import {mapGetters} from "vuex";
 
 export default {
