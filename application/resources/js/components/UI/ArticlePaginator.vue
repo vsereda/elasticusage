@@ -1,29 +1,32 @@
 <template>
     <nav class="articles-list-paginator" v-show="showPaginator">
-        <button
-            @click="this.$emit('loadFirstArticles')"
-            :disabled="!firstPageActive"
-        >
-            first
-        </button>
-        <button
-            @click="this.$emit('loadPreviousArticles')"
-            :disabled="!prevPageActive"
-        >
-            previous
-        </button>
-        <button
-            @click="this.$emit('loadNextArticles')"
-            :disabled="!nextPageActive"
-        >
-            next
-        </button>
-        <button
-            @click="this.$emit('loadLastArticles')"
-            :disabled="!lastPageActive"
-        >
-            last
-        </button>
+        <div>
+            <button
+                @click="this.$emit('loadFirstArticles')"
+                :disabled="!firstPageActive"
+            >
+                first
+            </button>
+            <button
+                @click="this.$emit('loadPreviousArticles')"
+                :disabled="!prevPageActive"
+            >
+                previous
+            </button>
+            <button
+                @click="this.$emit('loadNextArticles')"
+                :disabled="!nextPageActive"
+            >
+                next
+            </button>
+            <button
+                @click="this.$emit('loadLastArticles')"
+                :disabled="!lastPageActive"
+            >
+                last
+            </button>
+        </div>
+        <p v-show="currentPage && lastPage">page {{ currentPage }} from {{ lastPage }}</p>
     </nav>
 </template>
 
@@ -36,6 +39,14 @@ export default {
         }
     },
     props: {
+        currentPage: {
+            type: Number,
+            default: null
+        },
+        lastPage: {
+            type: Number,
+            default: null,
+        },
         firstPageActive: {
             type: Boolean,
             required: true,
