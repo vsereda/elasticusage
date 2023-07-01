@@ -32,11 +32,12 @@
 
 import PopupMessage from "./ArticlePopup.vue";
 import ArticleEditor from "./ArticleEditor.vue";
-// import {mapGetters, mapActions, mapMutations} from 'vuex';
+import globalArticles from "../../mixins/globalArticles";
 
 export default {
     name: "UpdateArticle",
     components: {ArticleEditor, PopupMessage},
+    mixins: [globalArticles,],
     props: {
         articleId: {
             "type": Number,
@@ -73,11 +74,7 @@ export default {
                         this.isPopupUpdatedOpen = true
                         this.isArticleDirty = false
                     }
-                    this.$store.dispatch('homeArticlesModule/loadCurrentArticles', null, {root: true})
-                    setTimeout(() => {
-                        // timeout needed for update search index
-                        this.$store.dispatch('searchArticleModule/loadCurrentArticles', null, {root: true})
-                    }, 2000)
+                    this.reloadAllArticles(this.$store)
                     this.articleUpdateError = false
                 })
             } catch (e) {

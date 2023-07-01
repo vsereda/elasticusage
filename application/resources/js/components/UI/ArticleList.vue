@@ -32,10 +32,12 @@
 <script>
 
 import PopupMessage from "./ArticlePopup.vue";
+import globalArticles from "../../mixins/globalArticles";
 
 export default {
     name: "ArticleList",
     components: {PopupMessage,},
+    mixins: [ globalArticles ],
     data: function () {
         return {
             isDropPopupOpen: false,
@@ -70,11 +72,7 @@ export default {
             axios.delete(this.dropArticleURL.concat('/', id)).then(
                 (response) => {
                     if (response?.data?.article?.id > 0) {
-                        this.$store.dispatch('homeArticlesModule/loadCurrentArticles', null, {root: true})
-                        setTimeout(() => {
-                            // timeout needed for update search index
-                            this.$store.dispatch('searchArticleModule/loadCurrentArticles', null, {root: true})
-                        }, 2000)
+                        this.reloadAllArticles(this.$store)
                         this.popupMessage = 'Article '.concat(response.data.article.id, ' successfully deleted!')
                     }
                 }
