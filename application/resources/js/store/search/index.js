@@ -11,6 +11,7 @@ const searchArticleModule = {
             articleLoadingError: false,
             searchString: '',
             searchArticleURL: 'api/articles/search/',
+            currentPageUrl: 'api/articles/search/',
         }
     },
     getters: {
@@ -20,14 +21,8 @@ const searchArticleModule = {
         getSearchString(state) {
             return state.searchString
         },
-        getSearchArticleURL(state) {
-            return state.searchArticleURL
-        },
         getIsArticleLoading(state) {
             return state.isArticleLoading
-        },
-        getLoadSearchResults(state) {
-            return state.loadSearchResults
         },
         getResultsSearchString(state) {
             return state.resultsSearchString
@@ -37,6 +32,30 @@ const searchArticleModule = {
         },
         getArticleLoadingError(state) {
             return state.articleLoadingError
+        },
+        getLinks(state) {
+            return state.links
+        },
+        getCurrentPageUrl(state) {
+            return state.currentPageUrl
+        },
+        getSearchArticleURL(state) {
+            return state.searchArticleURL
+        },
+        getMeta(state) {
+            return state.meta
+        },
+        firstPageActive(state) {
+            return (state.meta?.current_page > 1) && (state.articles.length !== 0);
+        },
+        prevPageActive(state) {
+            return (state.links?.prev !== null) && (state.articles.length !== 0)
+        },
+        nextPageActive(state) {
+            return (state.links?.next !== null) && (state.articles.length !== 0)
+        },
+        lastPageActive(state) {
+            return (state.links?.next !== null) && (state.articles.length !== 0)
         },
     },
     mutations: {
@@ -64,15 +83,18 @@ const searchArticleModule = {
         setSearchString(state, payload) {
             state.searchString = payload
         },
-        setArticleIdForEdit(state, payload) {
-            state.articleIdForEdit = payload
+        setCurrentPageUrl(state, payload) {
+            state.currentPageUrl = payload
         },
     },
     actions: {
-        loadSearchResults(context, v$) {
-            context.dispatch('resetSearchResults')
-            axios.post(context.getters.getSearchArticleURL, {
-                search_phrase: context.getters.getSearchString,
+        loadSearchResults(context, payload) {
+            if (payload?.reset) {
+                context.dispatch('resetSearchResults')
+            }
+            context.commit('setCurrentPageUrl', payload.url)
+            axios.post(payload.url, {
+                search_phrase: payload.searchStr,
             },).then((response) => {
                 context.commit('setArticles', response?.data?.articles)
                 context.commit('setMeta', response?.data?.meta)
@@ -80,20 +102,53 @@ const searchArticleModule = {
             }).catch(() => {
                 context.commit('setArticleLoadingError', true)
             }).finally(() => {
-                context.dispatch('setAfterSearchLoading', v$)
+                context.dispatch('setAfterSearchLoading')
             })
         },
         resetSearchResults(context) {
             context.commit('setArticles', [])
             context.commit('setIsArticleLoading', true)
             context.commit('setIsArticlesDirty', true)
-            context.commit('setResultsSearchString', '')
         },
-        setAfterSearchLoading(context, v$) {
+        setAfterSearchLoading(context) {
             context.commit('setIsArticleLoading', false)
-            context.commit('setResultsSearchString', context.getters.getSearchString)
+            if (context.getters.getSearchString) {
+                context.commit('setResultsSearchString', context.getters.getSearchString)
+            }
             context.commit('setSearchString', '')
-            v$.$reset()
+        },
+        loadCurrentArticles(context) {
+            let searchStr = context.getters.getResultsSearchString
+            if (searchStr !== '') {
+                context.dispatch('loadSearchResults', {
+                    url: context.getters.getCurrentPageUrl,
+                    searchStr: searchStr,
+                })
+            }
+        },
+        loadFirstArticles(context) {
+            context.dispatch('loadSearchResults', {
+                url: context.getters.getLinks?.first,
+                searchStr: context.getters.getResultsSearchString
+            })
+        },
+        loadPreviousArticles(context) {
+            context.dispatch('loadSearchResults', {
+                url: context.getters.getLinks?.prev,
+                searchStr: context.getters.getResultsSearchString
+            })
+        },
+        loadNextArtices(context) {
+            context.dispatch('loadSearchResults', {
+                url: context.getters.getLinks?.next,
+                searchStr: context.getters.getResultsSearchString
+            })
+        },
+        loadLastArticles(context) {
+            context.dispatch('loadSearchResults', {
+                url: context.getters.getLinks?.last,
+                searchStr: context.getters.getResultsSearchString
+            })
         },
     },
 }

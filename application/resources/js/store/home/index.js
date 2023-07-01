@@ -9,7 +9,7 @@ const homeArticlesModule = {
             articleLoadingError: false,
             isArticlesDirty: false,
             isArticleLoading: false,
-            currentPageUrl: '',
+            currentPageUrl: '/api/articles',
             popupMessage: '',
             dropArticleURL: '/api/articles',
         }

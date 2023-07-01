@@ -15,15 +15,22 @@
                     v-model="searchString"
                     :class="{ 'search-field-error': v$.searchString.$errors.length }"
                 >
-                <button @submit.prevent="getLoadSearchResults" :disabled="getIsArticleLoading">
+                <button @submit.prevent="requireSearchResults" :disabled="getIsArticleLoading">
                     Search
                 </button>
             </form>
             <article-paginator
-                :first-page-active="true"
-                :prev-page-active="true"
-                :next-page-active="true"
-                :last-page-active="true"
+                :first-page-active="firstPageActive"
+                :prev-page-active="prevPageActive"
+                :next-page-active="nextPageActive"
+                :last-page-active="lastPageActive"
+                :show-paginator="getMeta?.last_page > 1"
+                :current-page="getMeta?.current_page"
+                :last-page="getMeta?.last_page"
+                @load-first-articles="loadFirstArticles"
+                @load-previous-articles="loadPreviousArticles"
+                @load-next-articles="loadNextArtices"
+                @load-last-articles="loadLastArticles"
             ></article-paginator>
             <div class="input-errors" v-for="(error, index) of v$.searchString.$errors" :key="index">
                 <p class="search-valid-error">{{ error.$message }}</p>
@@ -58,7 +65,7 @@
 import useValidate from '@vuelidate/core'
 import UpdateArticle from "../UI/UpdateArticle.vue";
 import ArticlePaginator from "../UI/ArticlePaginator.vue";
-import {required, minLength, maxLength} from '@vuelidate/validators'
+import {required, minLength, maxLength, integer} from '@vuelidate/validators'
 import {mapGetters, mapActions, mapMutations} from 'vuex';
 
 export default {
@@ -75,37 +82,49 @@ export default {
         requireSearchResults() {
             this.v$.$validate()
             if (!this.v$.$error) {
-                this.loadSearchResults(this.v$)
+                this.v$.$reset()
+                this.loadSearchResults({ url: this.getSearchArticleURL, searchStr: this.getSearchString, reset: true })
             } else {
                 // Form failed validation
             }
         },
         openArticle(id) {
-            this.setArticleIdForEdit(parseInt(id))
+            this.articleIdForEdit = parseInt(id)
             this.openEdit = true
         },
         updatePopupClosed() {
             this.setSearchString(this.getResultsSearchString)
-            this.requireSearchResults()
             this.openEdit = false
         },
         ...mapMutations('searchArticleModule', [
-            'setArticleIdForEdit',
             'setSearchString',
         ]),
         ...mapActions('searchArticleModule', [
             'loadSearchResults',
+            'loadLastArticles',
+            'loadNextArtices',
+            'loadPreviousArticles',
+            'loadFirstArticles',
         ])
     },
     computed: {
+        integer() {
+            return integer
+        },
         ...mapGetters('searchArticleModule', [
             'getIsArticleLoading',
             'getSearchString',
-            'getLoadSearchResults',
+            'getSearchArticleURL',
             'getArticles',
             'getResultsSearchString',
             'getIsArticlesDirty',
             'getArticleLoadingError',
+            'lastPageActive',
+            'nextPageActive',
+            'prevPageActive',
+            'firstPageActive',
+            'getLinks',
+            'getMeta',
         ]),
         searchString: {
             get: function () {

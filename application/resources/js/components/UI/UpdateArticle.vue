@@ -72,12 +72,12 @@ export default {
                     if (response.data?.article?.id > 0) {
                         this.isPopupUpdatedOpen = true
                         this.isArticleDirty = false
-                        /**
-                         * todo
-                         */
-                        // this.$store.dispatch('load')
-                        this.$store.dispatch('homeArticlesModule/loadCurrentArticles', null, {root: true})
                     }
+                    this.$store.dispatch('homeArticlesModule/loadCurrentArticles', null, {root: true})
+                    setTimeout(() => {
+                        // timeout needed for update search index
+                        this.$store.dispatch('searchArticleModule/loadCurrentArticles', null, {root: true})
+                    }, 2000)
                     this.articleUpdateError = false
                 })
             } catch (e) {
@@ -103,8 +103,7 @@ export default {
             this.isArticleDirty = isDirty
         }
     },
-    computed: {
-    },
+    computed: {},
     mounted() {
         this.loadArticle(this.articleId)
     }
