@@ -15,6 +15,7 @@
                     <span class="drop-article-title" v-show="useDropButton">Drop</span>
                 </div>
             </div>
+            <p class="article-snippets" v-show="item?.body_snippets" v-html="item?.body_snippets"></p>
             <p class="article-body">{{ item.body }}</p>
         </article>
         <article-popup
