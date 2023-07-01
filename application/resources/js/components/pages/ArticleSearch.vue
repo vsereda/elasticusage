@@ -38,7 +38,7 @@
             </div>
             <template v-if="!getIsArticleLoading">
                 <p class="results-title" v-if="getArticles.length > 0">
-                    Search results for "<span>{{ getResultsSearchString }}</span>":
+                    Search results for "<span>{{ getResultsSearchString }}</span> ({{ getMeta?.total }})":
                 </p>
                 <p class="results-title" v-else-if="getIsArticlesDirty && !getArticleLoadingError">
                     There are no search results for "<span>{{ getResultsSearchString }}</span>":
