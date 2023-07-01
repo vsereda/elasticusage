@@ -74,6 +74,10 @@ const newArticleModule = {
                     }
                     context.commit('setArticleUpdateError', false)
                     context.dispatch('homeArticlesModule/loadCurrentArticles', null, {root: true})
+                    setTimeout(() => {
+                        // timeout needed for update search index
+                        context.dispatch('searchArticleModule/loadCurrentArticles', null, {root: true})
+                    }, 2000)
                 }
             ).catch(() => {
                 context.commit('setArticleErrorMessage', 'Article create error')
