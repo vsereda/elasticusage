@@ -10,8 +10,6 @@ const homeArticlesModule = {
             isArticlesDirty: false,
             isArticleLoading: false,
             currentPageUrl: '/api/articles',
-            popupMessage: '',
-            dropArticleURL: '/api/articles',
         }
     },
     getters: {
@@ -54,15 +52,9 @@ const homeArticlesModule = {
         getCurrentPageUrl(state) {
             return state.currentPageUrl
         },
-        getPopupMessage(state) {
-            return state.popupMessage
-        },
         getLoadArticlesURL(state) {
             return state.loadArticlesURL
         },
-        getDropArticleURL(state) {
-            return state.dropArticleURL
-        }
     },
     mutations: {
         setArticles(state, payload) {
@@ -86,23 +78,8 @@ const homeArticlesModule = {
         setCurrentPageUrl(state, payload) {
             state.currentPageUrl = payload
         },
-        setPopupMessage(state, payload) {
-            state.popupMessage = payload
-        },
     },
     actions: {
-        dropArticle(context, id) {
-            axios.delete(context.getters.getDropArticleURL.concat('/', id)).then(
-                (response) => {
-                    if (response?.data?.article?.id > 0) {
-                        context.dispatch('loadCurrentArticles')
-                        context.commit('setPopupMessage', 'Article '.concat(response.data.article.id, ' successfully deleted!'))
-                    }
-                }
-            ).catch(
-                context.commit('setPopupMessage', 'Drop article error!')
-            )
-        },
         loadArticles(context, url) {
             context.commit('setCurrentPageUrl', url)
             context.commit('setIsArticleLoading', true)

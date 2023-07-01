@@ -138,7 +138,7 @@ const searchArticleModule = {
                 searchStr: context.getters.getResultsSearchString
             })
         },
-        loadNextArtices(context) {
+        loadNextArticles(context) {
             context.dispatch('loadSearchResults', {
                 url: context.getters.getLinks?.next,
                 searchStr: context.getters.getResultsSearchString

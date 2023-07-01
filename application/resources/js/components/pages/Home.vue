@@ -1,15 +1,6 @@
 <template>
     <div>
-        <article-popup
-            :message="getPopupMessage"
-            :h2-message="'Deleting an article'"
-            :is-popup-open="isDropPopupOpen"
-            :enable-dialog-y-n="useDialogYesNo"
-            @close-popup="this.isDropPopupOpen = false"
-            @no-answer="this.isDropPopupOpen = false"
-            @yes-answer="onDropConfirmed"
-        ></article-popup>
-        <update-article :article-id="articleIdForEdit" v-if="openEdit" @popup-closed="updatePopupClosed">
+        <update-article :article-id="articleIdForEdit" v-if="openEdit" @popup-closed="updateClosed">
         </update-article>
         <template v-else>
             <h1>List of articles page {{ getMeta?.current_page ?? 1 }}</h1>
@@ -34,9 +25,8 @@
             </template>
             <article-list
                 :articles="getArticles"
-                :is-drop-popup-open="isDropPopupOpen"
+                :use-drop-button="true"
                 @open-article="openArticle"
-                @click-drop="onClickDrop"
             >
             </article-list>
         </template>
@@ -46,42 +36,29 @@
 <script>
 
 import UpdateArticle from "../UI/UpdateArticle.vue";
-import PopupMessage from "../UI/ArticlePopup.vue";
 import ArticleList from "../UI/ArticleList.vue";
 import {mapGetters, mapActions, mapMutations} from 'vuex';
 import ArticlePaginator from "../UI/ArticlePaginator.vue";
 
 export default {
     name: "Home",
-    components: {ArticlePaginator, PopupMessage, UpdateArticle, ArticleList},
+    components: {ArticlePaginator, UpdateArticle, ArticleList},
     data: function () {
         return {
             articleIdForEdit: 1,
-            articleIdForDrop: 1,
-            useDialogYesNo: false,
-            isDropPopupOpen: false,
             openEdit: false,
         }
     },
     methods: {
-        onDropConfirmed() {
-            this.useDialogYesNo = false
-            this.dropArticle(this.articleIdForDrop)
-        },
-        onClickDrop(id) {
-            this.articleIdForDrop = id
-            this.setPopupMessage('Do you really want to drop article '.concat(id, '?'))
-            this.useDialogYesNo = true
-            this.isDropPopupOpen = true
-        },
         openArticle(id) {
             this.articleIdForEdit = id
             this.openEdit = true
         },
-        updatePopupClosed() {
+        updateClosed() {
             this.openEdit = false
         },
-        ...mapMutations('homeArticlesModule', ['setPopupMessage']),
+        ...mapMutations('homeArticlesModule', [
+        ]),
         ...mapActions('homeArticlesModule', [
             'loadArticles',
             'loadLastArticles',
@@ -89,7 +66,6 @@ export default {
             'loadPreviousArticles',
             'loadFirstArticles',
             'loadCurrentArticles',
-            'dropArticle'
         ])
     },
     computed: {
@@ -102,7 +78,6 @@ export default {
             'noArticles',
             'getIsArticleLoading',
             'showArticleLoadingError',
-            'getPopupMessage',
             'getArticles',
         ])
     },

@@ -4,6 +4,7 @@
             :article-id="articleIdForEdit"
             v-if="openEdit"
             @popup-closed="updatePopupClosed"
+            @update-article="updateArticle"
         ></update-article>
         <template v-else>
             <h1>Article search</h1>
@@ -29,7 +30,7 @@
                 :last-page="getMeta?.last_page"
                 @load-first-articles="loadFirstArticles"
                 @load-previous-articles="loadPreviousArticles"
-                @load-next-articles="loadNextArtices"
+                @load-next-articles="loadNextArticles"
                 @load-last-articles="loadLastArticles"
             ></article-paginator>
             <div class="input-errors" v-for="(error, index) of v$.searchString.$errors" :key="index">
@@ -49,14 +50,14 @@
             <p class="results-title" v-else>
                 Loading search results...
             </p>
+            <article-list
+                :articles="getArticles"
+                :is-drop-popup-open="false"
+                :use-drop-button="true"
+                @open-article="openArticle"
+            >
+            </article-list>
 
-            <div class="article-wrapper">
-                <article v-for="item in getArticles" key="item.id" @click="openArticle(item.id)">
-                    <h2 class="article-name" v-html="item.id.concat('. ', item.title)"></h2>
-                    <p class="article-snippets" v-html="item.body_snippets"></p>
-                    <p class="article-body">{{ item.body }}</p>
-                </article>
-            </div>
         </template>
     </div>
 </template>
@@ -65,12 +66,15 @@
 import useValidate from '@vuelidate/core'
 import UpdateArticle from "../UI/UpdateArticle.vue";
 import ArticlePaginator from "../UI/ArticlePaginator.vue";
+import ArticleList from "../UI/ArticleList.vue";
+
 import {required, minLength, maxLength, integer} from '@vuelidate/validators'
 import {mapGetters, mapActions, mapMutations} from 'vuex';
+import ArticleEditor from "../UI/ArticleEditor.vue";
 
 export default {
     name: "ArticleSearch",
-    components: {UpdateArticle, ArticlePaginator,},
+    components: {ArticleEditor, UpdateArticle, ArticlePaginator, ArticleList},
     data: function () {
         return {
             v$: useValidate(),
@@ -83,7 +87,7 @@ export default {
             this.v$.$validate()
             if (!this.v$.$error) {
                 this.v$.$reset()
-                this.loadSearchResults({ url: this.getSearchArticleURL, searchStr: this.getSearchString, reset: true })
+                this.loadSearchResults({url: this.getSearchArticleURL, searchStr: this.getSearchString, reset: true})
             } else {
                 // Form failed validation
             }
@@ -102,7 +106,7 @@ export default {
         ...mapActions('searchArticleModule', [
             'loadSearchResults',
             'loadLastArticles',
-            'loadNextArtices',
+            'loadNextArticles',
             'loadPreviousArticles',
             'loadFirstArticles',
         ])
