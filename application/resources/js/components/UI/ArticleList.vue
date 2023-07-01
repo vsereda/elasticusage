@@ -1,6 +1,6 @@
 <template>
     <div class="article-wrapper">
-        <article v-for="item in getArticles" key="item.id" @click="$emit('openArticle', item.id)">
+        <article v-for="item in articles" key="item.id" @click="$emit('openArticle', item.id)">
             <div class="article-top">
                 <h2 class="article-name" v-html="''.concat(item.id, '. ', item.title)"></h2>
                 <div class="drop-button-wrapper" v-show="!isDropPopupOpen">
@@ -32,9 +32,10 @@ export default {
             "type": Boolean,
             "required": true,
         },
-    },
-    computed: {
-        ...mapGetters('homeArticlesModule', ['getArticles',])
+        articles: {
+            "type": Object,
+            "required": true,
+        },
     },
 }
 </script>

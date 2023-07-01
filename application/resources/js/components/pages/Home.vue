@@ -32,7 +32,12 @@
                     Search results loading error
                 </p>
             </template>
-            <article-list @open-article="openArticle" @click-drop="onClickDrop" :is-drop-popup-open="isDropPopupOpen">
+            <article-list
+                :articles="getArticles"
+                :is-drop-popup-open="isDropPopupOpen"
+                @open-article="openArticle"
+                @click-drop="onClickDrop"
+            >
             </article-list>
         </template>
     </div>
@@ -97,7 +102,8 @@ export default {
             'noArticles',
             'getIsArticleLoading',
             'showArticleLoadingError',
-            'getPopupMessage'
+            'getPopupMessage',
+            'getArticles',
         ])
     },
     mounted() {
