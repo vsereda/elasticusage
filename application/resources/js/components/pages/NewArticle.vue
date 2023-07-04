@@ -1,19 +1,19 @@
 <template>
     <div class="update-article-wrapper">
         <article-popup
-            :message="'Article number '.concat(getNewArticle?.id, ' successfully created!')"
+            :message="'Article number '.concat(newArticle?.id, ' successfully created!')"
             :h2-message="'New article'"
-            :is-popup-open="getIsPopupUpdatedOpen"
+            :is-popup-open="popupUpdatedOpened"
             @close-popup="popupClosed"
         ></article-popup>
         <h1>New article</h1>
         <article-editor
-            :article="getArticle"
-            :article-error="getArticleUpdateError"
-            :article-error-message="getArticleErrorMessage"
-            :is-article-dirty="getIsArticleDirty"
-            :is-article-updating="getIsArticleUpdating"
-            @set-article-dirty="setIsArticleDirty"
+            :article="article"
+            :article-error="articleUpdateError"
+            :article-error-message="articleErrorMessage"
+            :is-article-dirty="isArticleDirty"
+            :is-article-updating="isArticleUpdating"
+            @set-article-dirty="SET_ARTICLE_DIRTY"
             @update-article="storeArticle"
         ></article-editor>
     </div>
@@ -34,27 +34,27 @@ export default {
     },
     methods: {
         onSubmit() {
-            if (this.getIsArticleDirty) {
+            if (this.isArticleDirty) {
                 this.storeArticle()
             }
         },
         popupClosed() {
-            this.setIsPopupUpdatedOpen(false)
+            this.SET_POPUP_UPDATE_OPEN(false)
         },
         ...mapActions('newArticleModule', ['storeArticle']),
-        ...mapMutations('newArticleModule', ['setIsArticleDirty', 'setIsPopupUpdatedOpen'])
+        ...mapMutations('newArticleModule', ['SET_ARTICLE_DIRTY', 'SET_POPUP_UPDATE_OPEN'])
     },
     computed: {
         ...mapGetters(
-            'newArticleModule', [
-                'getNewArticle',
-                'getIsPopupUpdatedOpen',
-                'getArticle',
-                'getArticleUpdateError',
-                'getArticleErrorMessage',
-                'getIsArticleUpdating',
-                'getIsArticleDirty',
-            ])
+            'newArticleModule', {
+                newArticle: 'getNewArticle',
+                popupUpdatedOpened: 'getIsPopupUpdatedOpen',
+                article: 'getArticle',
+                articleUpdateError: 'getArticleUpdateError',
+                articleErrorMessage: 'getArticleErrorMessage',
+                isArticleUpdating: 'getIsArticleUpdating',
+                isArticleDirty: 'getIsArticleDirty',
+            })
     },
 }
 </script>
