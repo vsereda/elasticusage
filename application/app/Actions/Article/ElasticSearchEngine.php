@@ -8,6 +8,12 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ElasticSearchEngine implements SearchContract
 {
+    /**
+     * Perform article search using Elasticsearch
+     *
+     * @param string $searchStr
+     * @return LengthAwarePaginator
+     */
     public function __invoke(string $searchStr): LengthAwarePaginator
     {
         $SearchResult = Article::searchForm($searchStr)

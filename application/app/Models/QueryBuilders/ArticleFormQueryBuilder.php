@@ -6,20 +6,11 @@ use ElasticScoutDriverPlus\Builders\QueryBuilderInterface;
 
 final class ArticleFormQueryBuilder implements QueryBuilderInterface
 {
-    /**
-     * @var string
-     */
     private $input;
 
     public function __construct(string $input)
     {
         $this->input = $input;
-    }
-
-    public function title(string $title): self
-    {
-        $this->input = $title;
-        return $this;
     }
 
     public function buildQuery(): array
