@@ -6,11 +6,11 @@
 
 require('./bootstrap');
 
-import { createApp } from 'vue'
-import ArticleSearch from './pages/ArticleSearch.vue'
-import PopupMessage from "./components/PopupMessage.vue";
-
+import {createApp} from 'vue'
+import ArticleSearch from './components/pages/ArticleSearch.vue'
+import ArticlePopup from "./components/UI/ArticlePopup.vue";
 import router from "./router";
+import store from './store/index'
 
 /**
  * The following block of code may be used to automatically register your
@@ -29,8 +29,16 @@ import router from "./router";
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = createApp({})
+const app = createApp({
+    created() {
+        store.dispatch('homeArticlesModule/loadArticles',
+            store.getters['homeArticlesModule/getLoadArticlesURL']
+        )
+    }
+})
 app.use(router)
+app.use(store)
 app.component('article-search', ArticleSearch)
-app.component('popup-message', PopupMessage)
+app.component('article-popup', ArticlePopup)
 app.mount('#app')
+
