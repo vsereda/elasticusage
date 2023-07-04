@@ -8,14 +8,6 @@ Docker, Docker Compose
 
 ## installation
 
-Register host on your local machine. Open <span style="color: #F8F8F8">/etc/hosts</span> file. Add parameter:
-
-```
-127.0.0.1	elasticusage.org
-```
-
-Type in terminal:
-
 ```bash
 cp application/.env.example application/.env
 ```
@@ -29,7 +21,7 @@ Set <b>.env</b> file values:
     DB_DATABASE=db_name
     DB_USERNAME=db_username
     DB_PASSWORD=db_password
-    APP_URL=http://elasticusage.org
+    APP_URL=127.0.0.1
 
     ELASTIC_HOST=es:9200
     SCOUT_DRIVER=elastic
