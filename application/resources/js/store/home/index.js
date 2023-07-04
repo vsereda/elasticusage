@@ -31,22 +31,22 @@ const homeArticlesModule = {
         getIsArticleLoading(state) {
             return state.isArticleLoading
         },
-        firstPageActive(state) {
+        getFirstPageActive(state) {
             return (state.meta?.current_page > 1) && (state.articles.length !== 0);
         },
-        prevPageActive(state) {
+        getPrevPageActive(state) {
             return (state.links?.prev !== null) && (state.articles.length !== 0)
         },
-        nextPageActive(state) {
+        getNextPageActive(state) {
             return (state.links?.next !== null) && (state.articles.length !== 0)
         },
-        lastPageActive(state) {
+        getLastPageActive(state) {
             return (state.links?.next !== null) && (state.articles.length !== 0)
         },
-        noArticles(state) {
+        getNoArticles(state) {
             return (state.articles.length === 0) && !state.articleLoadingError && state.isArticlesDirty
         },
-        showArticleLoadingError(state) {
+        getArticleLoadingError(state) {
             return state.isArticlesDirty && state.articleLoadingError
         },
         getCurrentPageUrl(state) {
@@ -57,60 +57,60 @@ const homeArticlesModule = {
         },
     },
     mutations: {
-        setArticles(state, payload) {
+        SET_ARTICLES(state, payload) {
             state.articles = payload
         },
-        setArticleLoadingError(state, payload) {
+        SET_ARTICLE_LOADING_ERROR(state, payload) {
             state.articleLoadingError = payload
         },
-        setMeta(state, payload) {
+        SET_META(state, payload) {
             state.meta = payload
         },
-        setLinks(state, payload) {
+        SET_LINKS(state, payload) {
             state.links = payload
         },
-        setIsArticlesDirty(state, payload) {
+        SET_IS_ARTICLE_DIRTY(state, payload) {
             state.isArticlesDirty = payload
         },
-        setIsArticleLoading(state, payload) {
+        SET_IS_ARTICLE_LOADING(state, payload) {
             state.isArticleLoading = payload
         },
-        setCurrentPageUrl(state, payload) {
+        SET_CURRENT_PAGE_URL(state, payload) {
             state.currentPageUrl = payload
         },
     },
     actions: {
         loadArticles(context, url) {
-            context.commit('setCurrentPageUrl', url)
-            context.commit('setIsArticleLoading', true)
-            context.commit('setIsArticlesDirty', true)
+            context.commit('SET_CURRENT_PAGE_URL', url)
+            context.commit('SET_IS_ARTICLE_LOADING', true)
+            context.commit('SET_IS_ARTICLE_DIRTY', true)
 
             axios.get(url).then((response) => {
-                context.commit('setLinks', response?.data?.links)
-                context.commit('setMeta', response?.data?.meta)
+                context.commit('SET_LINKS', response?.data?.links)
+                context.commit('SET_META', response?.data?.meta)
                 if (response?.data?.data?.length > 0) {
-                    context.commit('setArticles', response.data.data)
+                    context.commit('SET_ARTICLES', response.data.data)
                 }
             }).catch(() => {
-                context.commit('setArticleLoadingError', true)
+                context.commit('SET_ARTICLE_LOADING_ERROR', true)
             }).finally(() => {
-                context.commit('setIsArticleLoading', false)
+                context.commit('SET_IS_ARTICLE_LOADING', false)
             });
         },
         loadCurrentArticles(context) {
-            context.dispatch('loadArticles', context.getters.getCurrentPageUrl)
+            context.dispatch('loadArticles', context.state.currentPageUrl)
         },
         loadFirstArticles(context) {
-            context.dispatch('loadArticles', context.getters.getLinks?.first)
+            context.dispatch('loadArticles', context.state.links?.first)
         },
         loadPreviousArticles(context) {
-            context.dispatch('loadArticles', context.getters.getLinks?.prev)
+            context.dispatch('loadArticles', context.state.links?.prev)
         },
         loadNextArticles(context) {
-            context.dispatch('loadArticles', context.getters.getLinks?.next)
+            context.dispatch('loadArticles', context.state.links?.next)
         },
         loadLastArticles(context) {
-            context.dispatch('loadArticles', context.getters.getLinks?.last)
+            context.dispatch('loadArticles', context.state.links?.last)
         },
     },
 }

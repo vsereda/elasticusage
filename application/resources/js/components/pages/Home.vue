@@ -3,7 +3,7 @@
         <update-article :article-id="articleIdForEdit" v-if="openEdit" @popup-closed="updateClosed">
         </update-article>
         <template v-else>
-            <h1>List of articles page {{ getMeta?.current_page ?? 1 }}</h1>
+            <h1>List of articles page {{ meta?.current_page ?? 1 }}</h1>
             <article-paginator
                 :last-page-active="lastPageActive"
                 :next-page-active="nextPageActive"
@@ -15,16 +15,16 @@
                 @load-last-articles="loadLastArticles"
             >
             </article-paginator>
-            <template v-if="!getIsArticleLoading">
+            <template v-if="!isArticleLoading">
                 <p class="results-title" v-if="noArticles">
                     There are no articles
                 </p>
-                <p class="results-title" v-else-if="showArticleLoadingError">
+                <p class="results-title" v-else-if="articleLoadingError">
                     Search results loading error
                 </p>
             </template>
             <article-list
-                :articles="getArticles"
+                :articles="articles"
                 :use-drop-button="true"
                 @open-article="openArticle"
             >
@@ -37,7 +37,7 @@
 
 import UpdateArticle from "../UI/UpdateArticle.vue";
 import ArticleList from "../UI/ArticleList.vue";
-import {mapGetters, mapActions, mapMutations} from 'vuex';
+import {mapGetters, mapActions,} from 'vuex';
 import ArticlePaginator from "../UI/ArticlePaginator.vue";
 
 export default {
@@ -57,8 +57,6 @@ export default {
         updateClosed() {
             this.openEdit = false
         },
-        ...mapMutations('homeArticlesModule', [
-        ]),
         ...mapActions('homeArticlesModule', [
             'loadArticles',
             'loadLastArticles',
@@ -69,17 +67,17 @@ export default {
         ])
     },
     computed: {
-        ...mapGetters('homeArticlesModule', [
-            'getMeta',
-            'firstPageActive',
-            'prevPageActive',
-            'nextPageActive',
-            'lastPageActive',
-            'noArticles',
-            'getIsArticleLoading',
-            'showArticleLoadingError',
-            'getArticles',
-        ])
+        ...mapGetters('homeArticlesModule', {
+            meta: 'getMeta',
+            firstPageActive: 'getFirstPageActive',
+            prevPageActive: 'getPrevPageActive',
+            nextPageActive: 'getNextPageActive',
+            lastPageActive: 'getLastPageActive',
+            noArticles: 'getNoArticles',
+            isArticleLoading: 'getIsArticleLoading',
+            articleLoadingError: 'getArticleLoadingError',
+            articles: 'getArticles',
+        })
     },
     mounted() {
     }
