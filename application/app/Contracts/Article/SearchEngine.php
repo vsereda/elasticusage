@@ -2,9 +2,15 @@
 
 namespace App\Contracts\Article;
 
-use ElasticScoutDriverPlus\Decorators\SearchResult;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface SearchEngine
 {
-    public function __invoke(string $searchStr): SearchResult;
+    /**
+     * Must return search results with paginator
+     *
+     * @param string $searchStr
+     * @return LengthAwarePaginator
+     */
+    public function __invoke(string $searchStr): LengthAwarePaginator;
 }
